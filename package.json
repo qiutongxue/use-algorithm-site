@@ -13,6 +13,16 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "astro": "^1.9.2"
+    "@astrojs/mdx": "^0.14.0",
+    "astro": "^1.9.2",
+    "sass": "^1.57.1"
+  },
+  "devDependencies": {
+    "@jsdevtools/rehype-toc": "^3.0.2",
+    "hastscript": "^7.2.0",
+    "mdast-util-to-hast": "^12.2.5",
+    "remark-directive": "^2.0.1",
+    "remark-toc": "^8.0.1",
+    "unist-util-visit": "^4.1.1"
   }
 }
