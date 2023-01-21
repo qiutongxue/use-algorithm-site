@@ -1,13 +1,29 @@
 ---
 // Welcome to Astro! Everything between these triple-dash code fences
 // is your "component front matter". It never runs in the browser.
-console.log('This runs in your terminal, not the browser!');
+console.log("This runs in your terminal, not the browser!");
+
+const codeTools = await Astro.glob("./tools/*.{md,mdx}");
 ---
+
 <!-- Below is your "component template." It's just HTML, but with
      some magic sprinkled in to help you build great templates. -->
 <html>
+  <head>
+    <meta charset="utf-8" />
+  </head>
+
   <body>
-    <h1>Hello, World!</h1>
+    <div>
+      {
+        codeTools.map((codeTool) => (
+          <a href={codeTool.url}>{codeTool.frontmatter.title}</a>
+        ))
+      }
+    </div>
+
+    <!-- <a href="priorityqueue">优先队列</a>
+    <a href="priorityqueue-removable">优先队列（可删除）</a> -->
   </body>
 </html>
 <style>

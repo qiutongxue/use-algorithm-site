@@ -1,0 +1,28 @@
+---
+import "../styles/container.scss";
+import "./layout.scss";
+const { frontmatter } = Astro.props;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Astro 网站 - {frontmatter.title}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+  </head>
+  <body>
+    <div class="root">
+      <article class="code-layout">
+        <slot />
+        <!-- 你的内容会被插入到这里 -->
+        <!-- <Code /> -->
+      </article>
+    </div>
+  </body>
+</html>
+
+<style>
+  body {
+    margin: 0;
+  }
+</style>
