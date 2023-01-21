@@ -1,8 +1,7 @@
 import { defineConfig } from 'astro/config';
 import remakrDirective from 'remark-directive';
-import remarkContainerPlugin from './scripts/remark-container-plugin';
-import remarkToc from 'remark-toc'
-import rehypeToc from '@jsdevtools/rehype-toc'
+import remarkContainerPlugin from './plugins/remark-container-plugin'
+import remarkTocPlugin from './plugins/rehype-toc-plugin';
 
 // https://astro.build/config
 import mdx from "@astrojs/mdx";
@@ -12,7 +11,7 @@ export default defineConfig({
   markdown: {
     extendDefaultPlugins: true,
     remarkPlugins: [remakrDirective, remarkContainerPlugin],
-    rehypePlugins: [rehypeToc]
+    rehypePlugins: [remarkTocPlugin]
   },
-  integrations: [mdx()]
+  integrations: [mdx()],
 });
