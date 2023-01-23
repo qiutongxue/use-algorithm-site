@@ -1,0 +1,112 @@
+---
+import CodeBlock from "./CodeBlock.astro";
+import type { Props as CodeBlockProps } from "./CodeBlock.astro";
+import { langMapper } from "@/utils/langMapper";
+export interface Props {
+  groups: CodeBlockProps[];
+}
+
+const { groups } = Astro.props;
+
+const total = groups.length;
+---
+
+<div class="code-group">
+  <div class="code-group-labels">
+    {
+      groups.map(({ lang }, idx) => (
+        <div class="code-group-label" data-lang={lang}>
+          <label for={`code-group-${lang}`}>{langMapper(lang as string)}</label>
+        </div>
+      ))
+    }
+  </div>
+
+  <div class="code-group-container">
+    {
+      groups.map(({ code, lang }, idx) => (
+        <>
+          <input
+            type="radio"
+            class="code-group-input"
+            name="code-group"
+            id={`code-group-${lang}`}
+            checked={idx === 0}
+          />
+          <CodeBlock code={code} lang={lang} />
+        </>
+      ))
+    }
+  </div>
+</div>
+
+<style lang="scss" is:global>
+  @import url(../styles/iconVars);
+
+  .code-group {
+    margin-top: 2.5rem;
+    .code-group-labels {
+      display: flex;
+      justify-content: start;
+      align-items: center;
+      flex-wrap: wrap;
+
+      .code-group-label {
+        display: flex;
+        align-items: center;
+        font-weight: bold;
+        cursor: pointer;
+        border-radius: 5px;
+        position: relative;
+
+        background-repeat: no-repeat;
+        background-size: 1.5rem;
+        background-position: 0.5rem 50%;
+
+        margin-right: 1rem;
+
+        &:not(:first-child)::before {
+          content: "|";
+          position: absolute;
+          left: -0.5rem;
+          color: rgba(0, 0, 0, 0.2);
+        }
+        &:hover {
+          background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        &[data-lang="js"] {
+          background-image: var(--icon-javascript);
+        }
+        &[data-lang="ts"] {
+          background-image: var(--icon-typescript);
+        }
+        &[data-lang="java"] {
+          background-image: var(--icon-java);
+        }
+        &[data-lang="py"] {
+          background-image: var(--icon-python);
+        }
+        &[data-lang="rs"] {
+          background-image: var(--icon-rust);
+        }
+        &[data-lang="go"] {
+          background-image: var(--icon-go);
+        }
+
+        label {
+          padding: 1rem 0.5rem 1rem 2.5rem;
+          cursor: pointer;
+        }
+      }
+    }
+
+    .code-group-input {
+      display: none;
+
+      &:not(:checked) + .code-block {
+        display: none;
+      }
+    }
+  }
+</style>

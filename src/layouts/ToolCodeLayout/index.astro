@@ -21,17 +21,7 @@ const codes = obj[currentPost] || [];
     <div class="root">
       <article class="code-layout">
         <slot />
-        {
-          codes.length &&
-            codes.map(({ code, lang }) => {
-              return (
-                <>
-                  <h2>{lang.toUpperCase()}</h2>
-                  <Code code={code} lang={lang} />
-                </>
-              );
-            })
-        }
+        {codes.length && <Code groups={codes} />}
       </article>
     </div>
   </body>
