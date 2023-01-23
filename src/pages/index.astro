@@ -3,7 +3,7 @@
 // is your "component front matter". It never runs in the browser.
 console.log("This runs in your terminal, not the browser!");
 
-const codeTools = await Astro.glob("./tools/*.{md,mdx}");
+const codeTools = await Astro.glob("./tool-codes/*.{md,mdx}");
 ---
 
 <!-- Below is your "component template." It's just HTML, but with
@@ -21,9 +21,6 @@ const codeTools = await Astro.glob("./tools/*.{md,mdx}");
         ))
       }
     </div>
-
-    <!-- <a href="priorityqueue">优先队列</a>
-    <a href="priorityqueue-removable">优先队列（可删除）</a> -->
   </body>
 </html>
 <style>
