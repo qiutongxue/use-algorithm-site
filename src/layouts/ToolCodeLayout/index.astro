@@ -1,21 +1,37 @@
 ---
 import "@/styles/container.scss";
 import "./index.scss";
+import { fetchCodes } from "@/utils/fetchCodes";
+import Code from "@/components/Code.astro";
+
 const { frontmatter } = Astro.props;
+const currentPost = frontmatter.url.split("/").at(-1);
+
+const obj = await fetchCodes();
+const codes = obj[currentPost] || [];
 ---
 
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>Astro 网站 - {frontmatter.title}</title>
+    <title>算法工具箱 - {frontmatter.title}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
   </head>
   <body>
     <div class="root">
       <article class="code-layout">
         <slot />
-        <!-- 你的内容会被插入到这里 -->
-        <!-- <Code /> -->
+        {
+          codes.length &&
+            codes.map(({ code, lang }) => {
+              return (
+                <>
+                  <h2>{lang.toUpperCase()}</h2>
+                  <Code code={code} lang={lang} />
+                </>
+              );
+            })
+        }
       </article>
     </div>
   </body>

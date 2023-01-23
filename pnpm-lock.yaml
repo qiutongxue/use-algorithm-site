@@ -2,6 +2,7 @@ lockfileVersion: 5.4
 
 specifiers:
   '@astrojs/mdx': ^0.14.0
+  '@types/node': ^18.11.18
   astro: ^1.9.2
   diacritics: ^1.3.0
   hast-util-from-html: ^1.0.1
@@ -13,10 +14,11 @@ specifiers:
 
 dependencies:
   '@astrojs/mdx': 0.14.0_rollup@2.79.1
-  astro: 1.9.2_sass@1.57.1
+  astro: 1.9.2_ovmyjmuuyckt3r3gpaexj2onji
   sass: 1.57.1
 
 devDependencies:
+  '@types/node': 18.11.18
   diacritics: 1.3.0
   hast-util-from-html: 1.0.1
   hastscript: 7.2.0
@@ -658,6 +660,9 @@ packages:
       '@types/unist': 2.0.6
     dev: false
 
+  /@types/node/18.11.18:
+    resolution: {integrity: sha512-DHQpWGjyQKSHj3ebjFI/wRKcqQcdR+MoFBygntYOZytCqNfkd2ZC4ARDJ2DQqhjH5p85Nnd3jhUJIXrszFX/JA==}
+
   /@types/parse5/6.0.3:
     resolution: {integrity: sha512-SuT16Q1K51EAVPz1K29DJ/sXjhSQ0zjvsypYJ6tlwVsRV9jwW5Adq2ch8Dq8kDBCkYnELS7N7VNCSB5nC56t/g==}
     dev: false
@@ -766,7 +771,7 @@ packages:
     hasBin: true
     dev: false
 
-  /astro/1.9.2_sass@1.57.1:
+  /astro/1.9.2_ovmyjmuuyckt3r3gpaexj2onji:
     resolution: {integrity: sha512-L+Ma0eR0Aa6QZg7RF0lEs+106Ye1/zukvtq3KtsYIogAojltlwllwU9X5CwMBzFwA55NxpNp4gSRh5US/xb+8Q==}
     engines: {node: ^14.18.0 || >=16.12.0, npm: '>=6.14.0'}
     hasBin: true
@@ -830,7 +835,7 @@ packages:
       typescript: 4.9.4
       unist-util-visit: 4.1.1
       vfile: 5.3.6
-      vite: 3.2.5_sass@1.57.1
+      vite: 3.2.5_ovmyjmuuyckt3r3gpaexj2onji
       vitefu: 0.2.4_vite@3.2.5
       yargs-parser: 21.1.1
       zod: 3.20.2
@@ -3551,7 +3556,7 @@ packages:
       unist-util-stringify-position: 3.0.2
       vfile-message: 3.1.3
 
-  /vite/3.2.5_sass@1.57.1:
+  /vite/3.2.5_ovmyjmuuyckt3r3gpaexj2onji:
     resolution: {integrity: sha512-4mVEpXpSOgrssFZAOmGIr85wPHKvaDAcXqxVxVRZhljkJOMZi1ibLibzjLHzJvcok8BMguLc7g1W6W/GqZbLdQ==}
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
@@ -3576,6 +3581,7 @@ packages:
       terser:
         optional: true
     dependencies:
+      '@types/node': 18.11.18
       esbuild: 0.15.18
       postcss: 8.4.21
       resolve: 1.22.1
@@ -3593,7 +3599,7 @@ packages:
       vite:
         optional: true
     dependencies:
-      vite: 3.2.5_sass@1.57.1
+      vite: 3.2.5_ovmyjmuuyckt3r3gpaexj2onji
     dev: false
 
   /vscode-css-languageservice/6.2.1:

@@ -1,5 +1,12 @@
 ---
 import { Code } from "astro/components";
+import type { Props as CodeProps } from "astro/components/Code.astro";
+
+interface Props {
+  code: string;
+  lang: CodeProps["lang"];
+}
+
 const { code, lang } = Astro.props;
 ---
 

@@ -8,19 +8,3 @@ import ts from "@/code/priorityqueue/priorityqueue.ts?raw";
 import js from "@/code/priorityqueue/priorityqueue.js?raw";
 
 # 优先队列
-
-## JavaScript
-
-从 npm 包中导入样式表
-Section titled 从 npm 包中导入样式表
-你也可能需要从外部 npm 包中加载样式表。它常用于像导入 Open Props 这样的工具类。如果你的包建议使用文件扩展名（即 package-name/styles.css 而不是 package-name/styles），那么它的行为应该与本地样式表一致：
-
-如果你所用的包不建议使用文件扩展名（即 包名/样式），那么你就需要先更新 Astro 配置
-
-假设你从 package-name 导入名为 normalize 的 CSS 文件（省略文件扩展名）。为了确保我们能正确地预渲染你的页面，需要把 package-name 添加到 vite.ssr.noExternal 数组中。
-
-<Code code={js} lang="js" theme="github-dark" />
-
-## TypeScript
-
-<Code code={ts} lang="ts" theme="github-dark" />
