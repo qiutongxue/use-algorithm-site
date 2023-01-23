@@ -5,6 +5,7 @@ import { fetchCodes } from "@/utils/fetchCodes";
 import Code from "@/components/Code.astro";
 
 const { frontmatter } = Astro.props;
+
 const currentPost = frontmatter.url.split("/").at(-1);
 
 const obj = await fetchCodes();
@@ -14,7 +15,7 @@ const codes = obj[currentPost] || [];
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>算法工具箱 - {frontmatter.title}</title>
+    <title>工具箱 - {frontmatter.title}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
   </head>
   <body>

@@ -1,0 +1,31 @@
+---
+import ToolCodeLayout from "@/layouts/ToolCodeLayout/index.astro";
+import { fetchCodes } from "@/utils/fetchCodes";
+
+export async function getStaticPaths() {
+  const all = await fetchCodes();
+  const exists = (await Astro.glob("./*.{md,mdx}")).map(({ url }) =>
+    url.split("/").at(-1)
+  );
+  console.log(exists);
+  const paths = Object.keys(all)
+    .filter((page) => !exists.includes(page))
+    .map((page) => {
+      return {
+        params: { another: page },
+        props: {
+          frontmatter: {
+            title: page,
+            url: page,
+          },
+        },
+      };
+    });
+  console.log(paths);
+  return paths;
+}
+
+const { frontmatter } = Astro.props;
+---
+
+<ToolCodeLayout frontmatter={frontmatter} />

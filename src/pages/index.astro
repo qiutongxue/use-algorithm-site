@@ -1,9 +1,12 @@
 ---
 // Welcome to Astro! Everything between these triple-dash code fences
+
+import { fetchCodes } from "@/utils/fetchCodes";
+
 // is your "component front matter". It never runs in the browser.
 console.log("This runs in your terminal, not the browser!");
 
-const codeTools = await Astro.glob("./tool-codes/*.{md,mdx}");
+const toolCodes = await fetchCodes();
 ---
 
 <!-- Below is your "component template." It's just HTML, but with
@@ -16,8 +19,8 @@ const codeTools = await Astro.glob("./tool-codes/*.{md,mdx}");
   <body>
     <div>
       {
-        codeTools.map((codeTool) => (
-          <a href={codeTool.url}>{codeTool.frontmatter.title}</a>
+        Object.keys(toolCodes).map((toolCode) => (
+          <a href={`tool-codes/${toolCode}`}>{toolCode}</a>
         ))
       }
     </div>
