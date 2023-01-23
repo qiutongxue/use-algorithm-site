@@ -1,12 +1,9 @@
 ---
 // Welcome to Astro! Everything between these triple-dash code fences
 
-import { fetchCodes } from "@/utils/fetchCodes";
+import { fetchCodes, fetchTitle } from "@/utils/fetchCodes";
 
-// is your "component front matter". It never runs in the browser.
-console.log("This runs in your terminal, not the browser!");
-
-const toolCodes = await fetchCodes();
+const toolCodes = await fetchTitle();
 ---
 
 <!-- Below is your "component template." It's just HTML, but with
@@ -17,17 +14,36 @@ const toolCodes = await fetchCodes();
   </head>
 
   <body>
-    <div>
+    <div class="wrapper">
       {
-        Object.keys(toolCodes).map((toolCode) => (
-          <a href={`tool-codes/${toolCode}`}>{toolCode}</a>
-        ))
+        Object.entries(toolCodes)
+          .sort()
+          .map(([toolCode, title]) => (
+            <a href={`tool-codes/${toolCode}`}>{title}</a>
+          ))
       }
     </div>
   </body>
 </html>
 <style>
-  h1 {
-    color: orange;
+  .wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    max-width: 960px;
+    margin: auto;
+    height: 100vh;
+  }
+
+  .wrapper a {
+    display: block;
+    margin: 1rem;
+    padding: 2rem 1rem;
+    text-decoration: none;
+    color: rgba(100, 100, 100, 0.5);
+    font-size: large;
+    font-weight: bold;
+    box-shadow: 1px 1px 10px 0px rgba(0, 0, 0, 0.2);
   }
 </style>

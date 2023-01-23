@@ -21,6 +21,7 @@ const codes = obj[currentPost] || [];
   <body>
     <div class="root">
       <article class="code-layout">
+        <h1>{frontmatter.title}</h1>
         <slot />
         {codes.length && <Code groups={codes} />}
       </article>
