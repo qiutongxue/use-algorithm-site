@@ -1,4 +1,6 @@
 ---
+// TODO: 尝试代码块的暗色模式
+
 import { Code } from "astro/components";
 import type { Props as CodeProps } from "astro/components/Code.astro";
 
@@ -54,6 +56,16 @@ const { code, lang } = Astro.props;
     overflow: auto;
     font-size: 0.9rem;
     background-color: var(--code-block-background-color) !important;
+  }
+
+  .code-block > pre::-webkit-scrollbar {
+    height: 12px;
+    background-color: var(--code-block-background-color);
+  }
+
+  .code-block > pre::-webkit-scrollbar-thumb {
+    background-color: rgb(189, 188, 188);
+    border-radius: 6px;
   }
 
   .code-block pre.astro-code > code {
