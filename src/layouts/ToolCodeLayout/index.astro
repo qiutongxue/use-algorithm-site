@@ -1,5 +1,6 @@
 ---
 import "@/styles/container.scss";
+import BaseLayout from "../BaseLayout/index.astro";
 import "./index.scss";
 import { fetchCodes, fetchTitle } from "@/utils/fetchCodes";
 import Code from "@/components/Code.astro";
@@ -13,25 +14,12 @@ const titleMapper = await fetchTitle();
 const codes = obj[currentPost] || [];
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>工具箱 - {frontmatter.title}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-  </head>
-  <body>
-    <div class="root">
-      <article class="code-layout">
-        <h1>{frontmatter.title || titleMapper[currentPost]}</h1>
-        <slot />
-        {codes.length && <Code groups={codes} />}
-      </article>
-    </div>
-  </body>
-</html>
-
-<style>
-  body {
-    margin: 0;
-  }
-</style>
+<BaseLayout>
+  <div class="root">
+    <article class="code-layout">
+      <h1>{frontmatter.title || titleMapper[currentPost]}</h1>
+      <slot />
+      {codes.length && <Code groups={codes} />}
+    </article>
+  </div>
+</BaseLayout>

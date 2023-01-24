@@ -1,0 +1,36 @@
+---
+// TODO: title 需要显示对应的文章标题
+// TODO: 看看能不能支持暗色模式（包括代码块？）
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>工具箱</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+  </head>
+  <body>
+    <header class="header">
+      <a href="/">回到主页</a>
+    </header>
+    <slot />
+  </body>
+</html>
+
+<style>
+  body {
+    margin: 0;
+  }
+
+  header {
+    background-color: #fff;
+    display: black;
+    height: 60px;
+    position: fixed;
+    left: 0;
+    right: 0;
+    margin: 0;
+    z-index: 999;
+    border-bottom: 1px solid #ddd;
+  }
+</style>

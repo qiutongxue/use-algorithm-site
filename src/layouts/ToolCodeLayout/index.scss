@@ -7,6 +7,10 @@
     box-sizing: border-box;
 }
 
+.root {
+    padding-top: 80px;
+}
+
 article.code-layout {
     & {
         width: 100%;
