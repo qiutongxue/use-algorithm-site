@@ -7,8 +7,6 @@ export interface Props {
 }
 
 const { groups } = Astro.props;
-
-const total = groups.length;
 ---
 
 <script>
@@ -28,10 +26,11 @@ const total = groups.length;
   <div class="code-group-labels">
     {
       groups.map(({ lang }, idx) => (
-        <div class="code-group-label" data-lang={lang}>
-          <label for={`code-group-${lang}`} class={idx === 0 ? "checked" : ""}>
-            {langMapper(lang as string)}
-          </label>
+        <div
+          class:list={["code-group-label", idx === 0 ? "checked" : ""]}
+          data-lang={lang}
+        >
+          <label for={`code-group-${lang}`}>{langMapper(lang as string)}</label>
         </div>
       ))
     }
