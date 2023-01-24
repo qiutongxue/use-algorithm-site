@@ -1,7 +1,7 @@
 ---
 import "@/styles/container.scss";
 import "./index.scss";
-import { fetchCodes } from "@/utils/fetchCodes";
+import { fetchCodes, fetchTitle } from "@/utils/fetchCodes";
 import Code from "@/components/Code.astro";
 
 const { frontmatter } = Astro.props;
@@ -9,6 +9,7 @@ const { frontmatter } = Astro.props;
 const currentPost = frontmatter.url.split("/").at(-1);
 
 const obj = await fetchCodes();
+const titleMapper = await fetchTitle();
 const codes = obj[currentPost] || [];
 ---
 
@@ -21,7 +22,7 @@ const codes = obj[currentPost] || [];
   <body>
     <div class="root">
       <article class="code-layout">
-        <h1>{frontmatter.title}</h1>
+        <h1>{frontmatter.title || titleMapper[currentPost]}</h1>
         <slot />
         {codes.length && <Code groups={codes} />}
       </article>
