@@ -17,7 +17,13 @@ const codesMap = await fetchCodes();
           .sort()
           .map(([post, title]) => (
             <a href={`tool-codes/${post}`}>
-              <span>{title}</span>
+              <span class="title-main">{title}</span>
+              <span class="title-sub">
+                {post
+                  .split(/[\-_]/)
+                  .map((s) => s[0].toUpperCase() + s.slice(1))
+                  .join(" ")}
+              </span>
               <div class="icon-wrapper">
                 {codesMap[post] &&
                   codesMap[post].map(({ lang }) => <div data-lang={lang} />)}
@@ -46,12 +52,23 @@ const codesMap = await fetchCodes();
       align-items: center;
       justify-content: center;
       margin: 1rem;
-      padding: 2rem 1rem;
+      padding: 1.5rem 1rem 0.5rem 1rem;
       text-decoration: none;
-      color: rgba(100, 100, 100, 0.5);
-      font-size: large;
-      font-weight: bold;
+      border-radius: 10px;
+      min-width: 100px;
+
       box-shadow: 1px 1px 10px 0px rgba(0, 0, 0, 0.2);
+
+      .title-main {
+        color: rgba(100, 100, 100, 0.7);
+        font-size: 24px;
+        font-weight: bold;
+      }
+
+      .title-sub {
+        color: rgba(100, 100, 100, 0.6);
+        margin-top: 5px;
+      }
 
       .icon-wrapper {
         display: flex;

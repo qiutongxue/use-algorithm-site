@@ -1,5 +1,14 @@
 import { dirname, extname } from "path";
 
+const priority = [
+    "ts",
+    "js",
+    "rs",
+    "java",
+    "py",
+    "go"
+]
+
 let cache: Record<string, any[]> | null = null
 let mapper: Record<string, string> | null = null
 
@@ -35,6 +44,12 @@ async function fetch() {
             code,
             lang
         })        
+    }
+
+
+
+    for (const value of Object.values(cache)) {
+        value.sort((a, b) => priority.indexOf(a.lang) - priority.indexOf(b.lang))
     }
 }
 
