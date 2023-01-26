@@ -20,10 +20,26 @@ const info = await fetchCodes();
   const posts = document.querySelectorAll(".wrapper .post");
   search.addEventListener(
     "input",
-    debounce((e) => {
+    debounce((e: Event) => {
       const target = (e.target as HTMLInputElement).value.toLowerCase();
       if (target === "") {
         posts.forEach((post) => post.classList.remove("hidden"));
+        return;
+      }
+      if (target.startsWith(":")) {
+        const targetLang = target.slice(1);
+        posts.forEach((post) => {
+          const langs = post.querySelectorAll("[data-lang]");
+          if (
+            [...langs].some((lang) =>
+              lang.getAttribute("data-lang").includes(targetLang)
+            )
+          ) {
+            post.classList.remove("hidden");
+          } else {
+            post.classList.add("hidden");
+          }
+        });
         return;
       }
       posts.forEach((post) => {
@@ -52,6 +68,10 @@ const info = await fetchCodes();
     <div class="main-icon"></div>
     <div class="search">
       <input type="text" id="search" name="search-code" />
+      <div class="search-tips">
+        * 可以输入 <kbd>:[文件名后缀]</kbd> 筛选语言，如 <kbd>:py</kbd>
+        <kbd>:js</kbd> 等
+      </div>
     </div>
     <div class="wrapper">
       {
@@ -85,6 +105,10 @@ const info = await fetchCodes();
 <style lang="scss">
   @import url(../styles/iconVars);
 
+  * {
+    box-sizing: border-box;
+  }
+
   body {
     display: flex;
     flex-direction: column;
@@ -92,6 +116,14 @@ const info = await fetchCodes();
     align-items: center;
     // height: 100vh;
     margin: 0;
+  }
+
+  kbd {
+    background-color: #fff;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    margin: auto 1px;
+    padding: 2px;
   }
 
   .main-icon {
@@ -108,12 +140,13 @@ const info = await fetchCodes();
     margin: 2rem auto;
     text-align: center;
     display: flex;
+    flex-direction: column;
     justify-content: center;
 
     input {
       outline: none;
       border: 1px solid #aaa;
-      height: 2.5rem;
+      height: 3rem;
       width: 100%;
       border-radius: 1.8rem;
       font-size: 1.5rem;
@@ -131,6 +164,12 @@ const info = await fetchCodes();
       &:focus {
         opacity: 1;
       }
+    }
+
+    .search-tips {
+      margin-top: 1rem;
+      opacity: 0.6;
+      font-size: 0.8rem;
     }
   }
 
