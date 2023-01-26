@@ -93,7 +93,7 @@ const info = await fetchCodes();
 
 <style lang="scss">
   @import url(../styles/iconVars);
-
+  @import url(../styles/datalang);
   * {
     box-sizing: border-box;
   }
@@ -212,24 +212,6 @@ const info = await fetchCodes();
         display: inline-block;
         width: 30px;
         height: 30px;
-        &[data-lang="js"] {
-          background-image: var(--icon-javascript);
-        }
-        &[data-lang="ts"] {
-          background-image: var(--icon-typescript);
-        }
-        &[data-lang="java"] {
-          background-image: var(--icon-java);
-        }
-        &[data-lang="py"] {
-          background-image: var(--icon-python);
-        }
-        &[data-lang="rs"] {
-          background-image: var(--icon-rust);
-        }
-        &[data-lang="go"] {
-          background-image: var(--icon-go);
-        }
       }
     }
   }
