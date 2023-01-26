@@ -5,6 +5,42 @@ const titleMap = await fetchTitle();
 const codesMap = await fetchCodes();
 ---
 
+<script>
+  function debounce(func: Function, delay: number) {
+    let timer: null | number | NodeJS.Timeout = null;
+    return function (...args) {
+      if (timer) clearTimeout(timer);
+
+      timer = setTimeout(() => {
+        func.apply(this, args);
+      }, delay);
+    };
+  }
+  const search = document.querySelector("#search");
+
+  const posts = document.querySelectorAll(".wrapper .post");
+  search.addEventListener(
+    "input",
+    debounce((e) => {
+      const target = (e.target as HTMLInputElement).value.toLowerCase();
+      if (target === "") {
+        posts.forEach((post) => post.classList.remove("hidden"));
+        return;
+      }
+      posts.forEach((post) => {
+        const source = (
+          post.getAttribute("data-search") as string
+        ).toLowerCase();
+        if (source.includes(target)) {
+          post.classList.remove("hidden");
+        } else {
+          post.classList.add("hidden");
+        }
+      });
+    }, 200)
+  );
+</script>
+
 <html>
   <head>
     <meta charset="utf-8" />
@@ -12,12 +48,20 @@ const codesMap = await fetchCodes();
   </head>
 
   <body>
+    <div class="main-icon"></div>
+    <div class="search">
+      <input type="text" id="search" />
+    </div>
     <div class="wrapper">
       {
         Object.entries(titleMap)
           .sort()
           .map(([post, title]) => (
-            <a href={`tool-codes/${post}`}>
+            <a
+              class="post"
+              href={`tool-codes/${post}`}
+              data-search={post + title}
+            >
               <span class="title-main">{title}</span>
               <span class="title-sub">
                 {post
@@ -38,27 +82,72 @@ const codesMap = await fetchCodes();
 <style lang="scss">
   @import url(../styles/iconVars);
 
+  body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    // height: 100vh;
+    margin: 0;
+  }
+
+  .main-icon {
+    background-image: url("/ua.svg");
+    background-repeat: no-repeat;
+    background-size: 32rem;
+    margin-top: 10rem;
+    background-position: 50% 50%;
+    height: 100px;
+    width: 100%;
+  }
+
+  .search {
+    margin: 2rem auto;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+
+    input {
+      outline: none;
+      border: 1px solid #aaa;
+      height: 2.5rem;
+      width: 100%;
+      border-radius: 1.8rem;
+      font-size: 1.5rem;
+      padding: 0.5rem 2rem 0.5rem 1rem;
+
+      background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxZW0iIGhlaWdodD0iMWVtIiB2aWV3Qm94PSIwIDAgMzIgMzIiPjxwYXRoIGZpbGw9IiM4ODg4ODgiIGQ9Im0yOSAyNy41ODZsLTcuNTUyLTcuNTUyYTExLjAxOCAxMS4wMTggMCAxIDAtMS40MTQgMS40MTRMMjcuNTg2IDI5Wk00IDEzYTkgOSAwIDEgMSA5IDlhOS4wMSA5LjAxIDAgMCAxLTktOVoiLz48L3N2Zz4=);
+      background-repeat: no-repeat;
+      background-position: 98% 50%;
+      background-size: 1.5rem;
+    }
+  }
+
   .wrapper {
     display: flex;
+    padding: 0 1rem;
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    max-width: 960px;
+    // max-width: 960px;
     margin: auto;
-    height: 100vh;
 
-    a {
+    a.post {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      margin: 1rem;
+      margin: 2rem 1rem;
       padding: 1.5rem 1rem 0.5rem 1rem;
       text-decoration: none;
       border-radius: 10px;
       min-width: 100px;
 
       box-shadow: 1px 1px 10px 0px rgba(0, 0, 0, 0.2);
+
+      &.hidden {
+        display: none;
+      }
 
       .title-main {
         color: rgba(100, 100, 100, 0.7);
