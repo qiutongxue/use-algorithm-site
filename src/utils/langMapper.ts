@@ -2,6 +2,8 @@ const mapper = {
     "ts": "TypeScript",
     "js": "JavaScript",
     "rs": "Rust",
+    "py": "Python",
+    "cpp": "C++",
 }
 
 export function langMapper(lang: string) {

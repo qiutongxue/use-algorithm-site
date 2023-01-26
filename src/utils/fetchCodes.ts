@@ -13,8 +13,15 @@ const priority = [
     "rs",
     "java",
     "py",
-    "go"
+    "go",
+    "cpp",
+    "c#",
+    "c",
 ]
+
+const langMapper = {
+    'cs': 'c#'
+}
 
 let cache: Record<string, CodeProps> | null = null
 
@@ -29,7 +36,8 @@ async function fetch() {
 
     for (const [path, promise] of Object.entries<() => Promise<string>>(globs)) {
         const code = await promise();
-        const lang = extname(path).slice(1);
+        let lang = extname(path).slice(1);
+        lang = langMapper[lang] || lang
         const post = dirname(path).split("/").at(-1);
         if (!post || post === 'code') continue
 
