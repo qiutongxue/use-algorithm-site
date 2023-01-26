@@ -1,8 +1,7 @@
 ---
-import { fetchCodes, fetchTitle } from "@/utils/fetchCodes";
+import { fetchCodes } from "@/utils/fetchCodes";
 
-const titleMap = await fetchTitle();
-const codesMap = await fetchCodes();
+const info = await fetchCodes();
 ---
 
 <script>
@@ -44,6 +43,8 @@ const codesMap = await fetchCodes();
 <html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
     <title>Use-Algorithm</title>
   </head>
 
@@ -54,24 +55,18 @@ const codesMap = await fetchCodes();
     </div>
     <div class="wrapper">
       {
-        Object.entries(titleMap)
+        Object.entries(info)
           .sort()
-          .map(([post, title]) => (
+          .map(([post, { chName, enName, keywords, codes }]) => (
             <a
               class="post"
               href={`tool-codes/${post}`}
-              data-search={post + title}
+              data-search={keywords || ""}
             >
-              <span class="title-main">{title}</span>
-              <span class="title-sub">
-                {post
-                  .split(/[\-_]/)
-                  .map((s) => s[0].toUpperCase() + s.slice(1))
-                  .join(" ")}
-              </span>
+              <span class="title-main">{chName || enName || post}</span>
+              <span class="title-sub">{enName}</span>
               <div class="icon-wrapper">
-                {codesMap[post] &&
-                  codesMap[post].map(({ lang }) => <div data-lang={lang} />)}
+                {codes && codes.map(({ lang }) => <div data-lang={lang} />)}
               </div>
             </a>
           ))

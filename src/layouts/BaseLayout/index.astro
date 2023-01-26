@@ -1,10 +1,10 @@
 ---
 // TODO: 看看能不能支持暗色模式（包括代码块？）
-import { fetchTitle } from "@/utils/fetchCodes";
+import { fetchCodes } from "@/utils/fetchCodes";
 
-const titles = await fetchTitle();
+const info = await fetchCodes();
 const post = Astro.url.pathname.split("/").at(-1);
-const title = titles[post] || "";
+const title = info[post]?.chName || "";
 ---
 
 <html lang="en">

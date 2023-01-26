@@ -2,22 +2,27 @@
 import "@/styles/container.scss";
 import BaseLayout from "../BaseLayout/index.astro";
 import "./index.scss";
-import { fetchCodes, fetchTitle } from "@/utils/fetchCodes";
+import { fetchCodes } from "@/utils/fetchCodes";
 import Code from "@/components/Code.astro";
 
 const { frontmatter } = Astro.props;
 
 const currentPost = frontmatter.url.split("/").at(-1);
 
-const obj = await fetchCodes();
-const titleMapper = await fetchTitle();
-const codes = obj[currentPost] || [];
+const info = await fetchCodes();
+const codes = info[currentPost]?.codes || [];
+
+const title =
+  frontmatter.title ||
+  info[currentPost]?.chName ||
+  info[currentPost]?.enName ||
+  currentPost;
 ---
 
 <BaseLayout>
   <div class="root">
     <article class="code-layout">
-      <h1>{frontmatter.title || titleMapper[currentPost]}</h1>
+      <h1>{title}</h1>
       <slot />
       {codes.length && <Code groups={codes} />}
     </article>
