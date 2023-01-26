@@ -1,6 +1,6 @@
 ---
 import { fetchCodes } from "@/utils/fetchCodes";
-
+import BaseLayout from "@/layouts/BaseLayout/index.astro";
 const info = await fetchCodes();
 ---
 
@@ -56,15 +56,8 @@ const info = await fetchCodes();
   );
 </script>
 
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-    <title>Use Algorithm</title>
-  </head>
-
-  <body>
+<BaseLayout>
+  <div class="root">
     <div class="main-icon"></div>
     <div class="search">
       <input type="text" id="search" name="search-code" />
@@ -95,13 +88,9 @@ const info = await fetchCodes();
           ))
       }
     </div>
-    <a
-      href="https://github.com/qiutongxue/use-algorithm-site"
-      class="icon github"
-    >
-    </a>
-  </body>
-</html>
+  </div>
+</BaseLayout>
+
 <style lang="scss">
   @import url(../styles/iconVars);
 
@@ -109,7 +98,7 @@ const info = await fetchCodes();
     box-sizing: border-box;
   }
 
-  body {
+  .root {
     display: flex;
     flex-direction: column;
     justify-content: center;
