@@ -45,13 +45,13 @@ const info = await fetchCodes();
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Use-Algorithm</title>
+    <title>Use Algorithm</title>
   </head>
 
   <body>
     <div class="main-icon"></div>
     <div class="search">
-      <input type="text" id="search" />
+      <input type="text" id="search" name="search-code" />
     </div>
     <div class="wrapper">
       {
@@ -115,11 +115,19 @@ const info = await fetchCodes();
       border-radius: 1.8rem;
       font-size: 1.5rem;
       padding: 0.5rem 2rem 0.5rem 1rem;
+      opacity: 0.5;
 
       background-image: var(--icon-search);
       background-repeat: no-repeat;
       background-position: 98% 50%;
       background-size: 1.5rem;
+
+      transition: 0.5s ease;
+
+      &:hover,
+      &:focus {
+        opacity: 1;
+      }
     }
   }
 
