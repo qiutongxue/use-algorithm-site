@@ -72,6 +72,11 @@ const info = await fetchCodes();
           ))
       }
     </div>
+    <a
+      href="https://github.com/qiutongxue/use-algorithm-site"
+      class="icon github"
+    >
+    </a>
   </body>
 </html>
 <style lang="scss">
@@ -111,7 +116,7 @@ const info = await fetchCodes();
       font-size: 1.5rem;
       padding: 0.5rem 2rem 0.5rem 1rem;
 
-      background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxZW0iIGhlaWdodD0iMWVtIiB2aWV3Qm94PSIwIDAgMzIgMzIiPjxwYXRoIGZpbGw9IiM4ODg4ODgiIGQ9Im0yOSAyNy41ODZsLTcuNTUyLTcuNTUyYTExLjAxOCAxMS4wMTggMCAxIDAtMS40MTQgMS40MTRMMjcuNTg2IDI5Wk00IDEzYTkgOSAwIDEgMSA5IDlhOS4wMSA5LjAxIDAgMCAxLTktOVoiLz48L3N2Zz4=);
+      background-image: var(--icon-search);
       background-repeat: no-repeat;
       background-position: 98% 50%;
       background-size: 1.5rem;
@@ -187,5 +192,18 @@ const info = await fetchCodes();
         }
       }
     }
+  }
+
+  .icon.github {
+    width: 25px;
+    height: 25px;
+    background-image: var(--icon-github);
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: 25px;
+
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
   }
 </style>
