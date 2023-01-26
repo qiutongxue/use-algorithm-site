@@ -15,7 +15,7 @@ const title = titles[post] || "";
   </head>
   <body>
     <header class="header">
-      <a href="/">回到主页</a>
+      <a href="/"> </a>
     </header>
     <slot />
   </body>
@@ -28,7 +28,10 @@ const title = titles[post] || "";
 
   header {
     background-color: #fff;
-    display: black;
+    display: flex;
+    align-items: center;
+    padding: 0 1rem;
+    justify-content: start;
     height: 60px;
     position: fixed;
     left: 0;
@@ -36,5 +39,15 @@ const title = titles[post] || "";
     margin: 0;
     z-index: 999;
     border-bottom: 1px solid #ddd;
+  }
+
+  header a {
+    display: block;
+    height: 50px;
+    width: 100%;
+    background-size: 16rem;
+    background-position: 0 50%;
+    background-repeat: no-repeat;
+    background-image: url("/ua.svg");
   }
 </style>
