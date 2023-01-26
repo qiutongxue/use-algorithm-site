@@ -15,7 +15,10 @@ const title = titles[post] || "";
   </head>
   <body>
     <header class="header">
-      <a href="/"> </a>
+      <a href="/" class="home"></a>
+      <a
+        href="https://github.com/qiutongxue/use-algorithm-site"
+        class="link github"></a>
     </header>
     <slot />
   </body>
@@ -41,13 +44,26 @@ const title = titles[post] || "";
     border-bottom: 1px solid #ddd;
   }
 
-  header a {
+  header .home {
     display: block;
     height: 50px;
-    width: 100%;
+    width: 260px;
     background-size: 16rem;
     background-position: 0 50%;
     background-repeat: no-repeat;
     background-image: url("/ua.svg");
+  }
+
+  header .link {
+    margin-left: auto;
+    width: 25px;
+    height: 25px;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: 100%;
+  }
+
+  header .link.github {
+    background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxZW0iIGhlaWdodD0iMWVtIiB2aWV3Qm94PSIwIDAgMzIgMzIiPjxwYXRoIGZpbGw9IiM4ODg4ODgiIGZpbGwtcnVsZT0iZXZlbm9kZCIgZD0iTTE2IDJhMTQgMTQgMCAwIDAtNC40MyAyNy4yOGMuNy4xMyAxLS4zIDEtLjY3di0yLjM4Yy0zLjg5Ljg0LTQuNzEtMS44OC00LjcxLTEuODhhMy43MSAzLjcxIDAgMCAwLTEuNjItMi4wNWMtMS4yNy0uODYuMS0uODUuMS0uODVhMi45NCAyLjk0IDAgMCAxIDIuMTQgMS40NWEzIDMgMCAwIDAgNC4wOCAxLjE2YTIuOTMgMi45MyAwIDAgMSAuODgtMS44N2MtMy4xLS4zNi02LjM3LTEuNTYtNi4zNy02LjkyYTUuNCA1LjQgMCAwIDEgMS40NC0zLjc2YTUgNSAwIDAgMSAuMTQtMy43czEuMTctLjM4IDMuODUgMS40M2ExMy4zIDEzLjMgMCAwIDEgNyAwYzIuNjctMS44MSAzLjg0LTEuNDMgMy44NC0xLjQzYTUgNSAwIDAgMSAuMTQgMy43YTUuNCA1LjQgMCAwIDEgMS40NCAzLjc2YzAgNS4zOC0zLjI3IDYuNTYtNi4zOSA2LjkxYTMuMzMgMy4zMyAwIDAgMSAuOTUgMi41OXYzLjg0YzAgLjQ2LjI1LjgxIDEgLjY3QTE0IDE0IDAgMCAwIDE2IDJaIi8+PC9zdmc+);
   }
 </style>
