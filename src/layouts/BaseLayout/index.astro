@@ -1,12 +1,16 @@
 ---
-// TODO: title 需要显示对应的文章标题
 // TODO: 看看能不能支持暗色模式（包括代码块？）
+import { fetchTitle } from "@/utils/fetchCodes";
+
+const titles = await fetchTitle();
+const post = Astro.url.pathname.split("/").at(-1);
+const title = titles[post] || "";
 ---
 
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>工具箱</title>
+    <title>工具箱{title ? ` - ${title}` : ""}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
   </head>
   <body>
