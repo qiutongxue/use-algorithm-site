@@ -52,7 +52,7 @@ const title = info[post]?.chName || "";
     height: 50px;
     width: 260px;
     background-size: 16rem;
-    background-position: 0 50%;
+    background-position: 50% 50%;
     background-repeat: no-repeat;
     background-image: url("/ua.svg");
   }
@@ -68,5 +68,14 @@ const title = info[post]?.chName || "";
 
   header .link.github {
     background-image: var(--icon-github);
+  }
+
+  @media screen and (max-width: 600px) {
+    header .home {
+      background-image: url("/ua_sm.svg");
+      background-size: 100%;
+      width: 5rem;
+      position: relative;
+    }
   }
 </style>
