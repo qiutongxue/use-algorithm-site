@@ -1,3 +1,8 @@
+@import url(./iconVars.css);;
+
+[data-lang] {
+    background-image: var(--icon-file);
+}
 [data-lang="js"] {
     background-image: var(--icon-javascript);
 }
