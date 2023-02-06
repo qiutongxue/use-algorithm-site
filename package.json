@@ -24,7 +24,9 @@
     "hast-util-from-html": "^1.0.1",
     "hastscript": "^7.2.0",
     "mdast-util-to-hast": "^12.2.5",
+    "rehype-katex": "^6.0.2",
     "remark-directive": "^2.0.1",
+    "remark-math": "^5.1.1",
     "unist-util-visit": "^4.1.1"
   }
 }

@@ -5,6 +5,7 @@ import { fetchCodes } from '@/utils/fetchCodes'
 const info = await fetchCodes()
 const post = Astro.url.pathname.split('/').at(-1)
 const title = info[post]?.chName || ''
+const { frontmatter } = Astro.props
 ---
 
 <html lang='en'>
@@ -12,7 +13,16 @@ const title = info[post]?.chName || ''
     <meta charset='utf-8' />
     <title>Use Algorithm{title ? ` | ${title}` : ''}</title>
     <link href='/favicon.svg' rel='icon' type='image/svg+xml' />
-
+    {
+      frontmatter && frontmatter.math && (
+        <link
+          rel='stylesheet'
+          href='https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css'
+          integrity='sha384-Xi8rHCmBmhbuyyhbI88391ZKP2dmfnOl4rT9ZfRI7mLTdk1wblIUnrIq35nqwEvC'
+          crossorigin='anonymous'
+        />
+      )
+    }
     <meta name='viewport' content='width=device-width, initial-scale=1' />
   </head>
   <body>
