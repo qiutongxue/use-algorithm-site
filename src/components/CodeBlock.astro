@@ -1,37 +1,37 @@
 ---
 // TODO: 尝试代码块的暗色模式
 
-import { Code } from "astro/components";
-import type { Props as CodeProps } from "astro/components/Code.astro";
+import { Code } from 'astro/components'
+import type { Props as CodeProps } from 'astro/components/Code.astro'
 
 export interface Props {
-  code: string;
-  lang: CodeProps["lang"];
+  code: string
+  lang: CodeProps['lang']
 }
 
-const { code, lang } = Astro.props;
+const { code, lang } = Astro.props
 ---
 
 <script>
   // 复制代码
-  const copyButtons = document.querySelectorAll(".code-block button.copy");
+  const copyButtons = document.querySelectorAll('.code-block button.copy')
   copyButtons.forEach((button) => {
-    button.addEventListener("click", () => {
-      if (button.classList.contains("copied")) return;
-      const code = button.parentElement.querySelector("pre code").textContent;
+    button.addEventListener('click', () => {
+      if (button.classList.contains('copied')) return
+      const code = button.parentElement.querySelector('pre code').textContent
       navigator.clipboard.writeText(code).then(() => {
-        button.classList.add("copied");
+        button.classList.add('copied')
         setTimeout(() => {
-          button.classList.remove("copied");
-        }, 1500);
-      });
-    });
-  });
+          button.classList.remove('copied')
+        }, 1500)
+      })
+    })
+  })
 </script>
 
-<div class="code-block">
-  <button class="copy"></button>
-  <span class="lang">{lang}</span>
+<div class='code-block'>
+  <button class='copy'></button>
+  <span class='lang'>{lang}</span>
   <Code code={code} lang={lang} />
 </div>
 
@@ -70,7 +70,7 @@ const { code, lang } = Astro.props;
 
   .code-block pre.astro-code > code {
     all: unset;
-    font-family: "Maple Mono", serif;
+    font-family: 'Maple Mono', serif;
     min-width: 100%;
     display: inline-block;
     word-break: break-word;

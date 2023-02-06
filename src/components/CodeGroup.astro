@@ -1,25 +1,25 @@
 ---
-import CodeBlock from "./CodeBlock.astro";
-import type { Props as CodeBlockProps } from "./CodeBlock.astro";
-import { langMapper } from "@/utils/langMapper";
+import CodeBlock from "./CodeBlock.astro"
+import type { Props as CodeBlockProps } from "./CodeBlock.astro"
+import { langMapper } from "@/utils/langMapper"
 export interface Props {
-  groups: CodeBlockProps[];
+  groups: CodeBlockProps[]
 }
 
-const { groups } = Astro.props;
+const { groups } = Astro.props
 ---
 
 <script>
-  const codeGroups = document.querySelectorAll(".code-group");
+  const codeGroups = document.querySelectorAll(".code-group")
   codeGroups.forEach((codeGroup) => {
-    const labels = codeGroup.querySelectorAll(".code-group-label");
+    const labels = codeGroup.querySelectorAll(".code-group-label")
     labels.forEach((label) => {
       label.addEventListener("click", () => {
-        labels.forEach((label) => label.classList.remove("checked"));
-        label.classList.add("checked");
-      });
-    });
-  });
+        labels.forEach((label) => label.classList.remove("checked"))
+        label.classList.add("checked")
+      })
+    })
+  })
 </script>
 
 <div class="code-group">

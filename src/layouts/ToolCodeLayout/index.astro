@@ -1,27 +1,27 @@
 ---
-import "@/styles/container.scss";
-import BaseLayout from "../BaseLayout/index.astro";
-import "./index.scss";
-import { fetchCodes } from "@/utils/fetchCodes";
-import Code from "@/components/Code.astro";
+import '@/styles/container.scss'
+import BaseLayout from '../BaseLayout/index.astro'
+import './index.scss'
+import { fetchCodes } from '@/utils/fetchCodes'
+import Code from '@/components/Code.astro'
 
-const { frontmatter } = Astro.props;
+const { frontmatter } = Astro.props
 
-const currentPost = frontmatter.url.split("/").at(-1);
+const currentPost = frontmatter.url.split('/').at(-1)
 
-const info = await fetchCodes();
-const codes = info[currentPost]?.codes || [];
+const info = await fetchCodes()
+const codes = info[currentPost]?.codes || []
 
 const title =
   frontmatter.title ||
   info[currentPost]?.chName ||
   info[currentPost]?.enName ||
-  currentPost;
+  currentPost
 ---
 
 <BaseLayout>
-  <div class="root">
-    <article class="code-layout">
+  <div class='root'>
+    <article class='code-layout'>
       <h1>{title}</h1>
       <slot />
       {codes.length && <Code groups={codes} />}

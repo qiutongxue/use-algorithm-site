@@ -1,33 +1,33 @@
 ---
 // TODO: 看看能不能支持暗色模式（包括代码块？）
-import { fetchCodes } from "@/utils/fetchCodes";
+import { fetchCodes } from '@/utils/fetchCodes'
 
-const info = await fetchCodes();
-const post = Astro.url.pathname.split("/").at(-1);
-const title = info[post]?.chName || "";
+const info = await fetchCodes()
+const post = Astro.url.pathname.split('/').at(-1)
+const title = info[post]?.chName || ''
 ---
 
-<html lang="en">
+<html lang='en'>
   <head>
-    <meta charset="utf-8" />
-    <title>Use Algorithm{title ? ` | ${title}` : ""}</title>
-    <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
+    <meta charset='utf-8' />
+    <title>Use Algorithm{title ? ` | ${title}` : ''}</title>
+    <link href='/favicon.svg' rel='icon' type='image/svg+xml' />
 
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name='viewport' content='width=device-width, initial-scale=1' />
   </head>
   <body>
-    <header class="header">
-      <a href="/" class="home"></a>
+    <header class='header'>
+      <a href='/' class='home'></a>
       <a
-        href="https://github.com/qiutongxue/use-algorithm-site"
-        class="link github"></a>
+        href='https://github.com/qiutongxue/use-algorithm-site'
+        class='link github'></a>
     </header>
     <slot />
   </body>
 </html>
 
 <style>
-  @import "../../styles/iconVars.css";
+  @import '../../styles/iconVars.css';
   body {
     margin: 0;
   }
@@ -54,7 +54,7 @@ const title = info[post]?.chName || "";
     background-size: 16rem;
     background-position: 50% 50%;
     background-repeat: no-repeat;
-    background-image: url("/ua.svg");
+    background-image: url('/ua.svg');
   }
 
   header .link {
@@ -72,7 +72,7 @@ const title = info[post]?.chName || "";
 
   @media screen and (max-width: 600px) {
     header .home {
-      background-image: url("/ua_sm.svg");
+      background-image: url('/ua_sm.svg');
       background-size: 100%;
       width: 5rem;
       position: relative;

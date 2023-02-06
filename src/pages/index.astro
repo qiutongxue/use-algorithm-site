@@ -1,59 +1,59 @@
 ---
-import { fetchCodes } from "@/utils/fetchCodes";
-import BaseLayout from "@/layouts/BaseLayout/index.astro";
-const info = await fetchCodes();
+import { fetchCodes } from "@/utils/fetchCodes"
+import BaseLayout from "@/layouts/BaseLayout/index.astro"
+const info = await fetchCodes()
 ---
 
 <script>
   function debounce(func: Function, delay: number) {
-    let timer: null | number | NodeJS.Timeout = null;
+    let timer: null | number | NodeJS.Timeout = null
     return function (...args) {
-      if (timer) clearTimeout(timer);
+      if (timer) clearTimeout(timer)
 
       timer = setTimeout(() => {
-        func.apply(this, args);
-      }, delay);
-    };
+        func.apply(this, args)
+      }, delay)
+    }
   }
-  const search = document.querySelector("#search");
+  const search = document.querySelector("#search")
 
-  const posts = document.querySelectorAll(".wrapper .post");
+  const posts = document.querySelectorAll(".wrapper .post")
   search.addEventListener(
     "input",
     debounce((e: Event) => {
-      const target = (e.target as HTMLInputElement).value.toLowerCase();
+      const target = (e.target as HTMLInputElement).value.toLowerCase()
       if (target === "") {
-        posts.forEach((post) => post.classList.remove("hidden"));
-        return;
+        posts.forEach((post) => post.classList.remove("hidden"))
+        return
       }
       if (target.startsWith(":")) {
-        const targetLang = target.slice(1);
+        const targetLang = target.slice(1)
         posts.forEach((post) => {
-          const langs = post.querySelectorAll("[data-lang]");
+          const langs = post.querySelectorAll("[data-lang]")
           if (
             [...langs].some((lang) =>
               lang.getAttribute("data-lang").includes(targetLang)
             )
           ) {
-            post.classList.remove("hidden");
+            post.classList.remove("hidden")
           } else {
-            post.classList.add("hidden");
+            post.classList.add("hidden")
           }
-        });
-        return;
+        })
+        return
       }
       posts.forEach((post) => {
         const source = (
           post.getAttribute("data-search") as string
-        ).toLowerCase();
+        ).toLowerCase()
         if (source.includes(target)) {
-          post.classList.remove("hidden");
+          post.classList.remove("hidden")
         } else {
-          post.classList.add("hidden");
+          post.classList.add("hidden")
         }
-      });
+      })
     }, 200)
-  );
+  )
 </script>
 
 <BaseLayout>
