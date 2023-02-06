@@ -11,19 +11,19 @@ function useComb(size) {
         let b = $(a) % MOD, res = 1n;
         while (n) {
             if (n % 2 === 1) {
-                res = res * b % MOD;
+                res = (res * b) % MOD;
             }
-            b = b * b % MOD;
+            b = (b * b) % MOD;
             n = Math.trunc(n / 2);
         }
         return Number(res % MOD);
     }
     for (let i = 1; i <= size; i++) {
-        fac[i] = fac[i - 1] * i % MOD;
+        fac[i] = (fac[i - 1] * i) % MOD;
         inv[i] = fastPow(fac[i], MOD - 2);
     }
     function comb(n, k) {
-        return Number($(fac[n]) * $(inv[k]) % $(MOD) * $(inv[n - k]) % $(MOD));
+        return Number(((($(fac[n]) * $(inv[k])) % $(MOD)) * $(inv[n - k])) % $(MOD));
     }
     return comb;
 }

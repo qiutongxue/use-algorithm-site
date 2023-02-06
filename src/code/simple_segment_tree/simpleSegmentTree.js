@@ -11,18 +11,19 @@ function useSimpleSegmentTree(inputArray, operation, operationFallback) {
         return {
             mid: getMid(start, end),
             leftNode: getLeftNode(node),
-            rightNode: getRightNode(node)
+            rightNode: getRightNode(node),
         };
     };
     function initTree(array) {
         let treeLength;
         const length = array.length;
-        if (Number.isInteger(Math.log2(length))) { // 正好占据完美二叉树的所有叶子节点
+        if (Number.isInteger(Math.log2(length))) {
+            // 正好占据完美二叉树的所有叶子节点
             treeLength = 2 * length - 1;
         }
         else {
             const pow = Math.ceil(Math.log2(length));
-            treeLength = 2 * (2 ** pow) - 1;
+            treeLength = 2 * 2 ** pow - 1;
         }
         return new Array(treeLength).fill(fallback);
     }
@@ -66,18 +67,18 @@ function useSimpleSegmentTree(inputArray, operation, operationFallback) {
     }
     const query = (left, right) => {
         if (left > right || left < 0 || right >= n) {
-            throw new Error('left 或 right 超出了范围');
+            throw new Error("left 或 right 超出了范围");
         }
         return queryTree(0, 0, n - 1, left, right);
     };
     const update = (index, value) => {
         if (index < 0 || index >= n) {
-            throw new Error('index 超出了数组范围');
+            throw new Error("index 超出了数组范围");
         }
         updateTree(0, 0, n - 1, index, value);
     };
     return {
         update,
-        query
+        query,
     };
 }

@@ -4,7 +4,7 @@ function matrixFastPow(A, b) {
     let res = new Array(n).fill(0).map(() => new Array(n).fill(0));
     for (let i = 0; i < n; i++)
         res[i][i] = 1;
-    let mat = A.map(row => row.slice());
+    let mat = A.map((row) => row.slice());
     const mul = (A, B) => {
         const m = A.length, n = B[0].length, p = B.length;
         const res = new Array(m).fill(0).map(() => new Array(n).fill(0));

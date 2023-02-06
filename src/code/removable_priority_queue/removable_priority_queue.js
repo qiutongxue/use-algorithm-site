@@ -1,5 +1,5 @@
 "use strict";
-function useRemovablePriorityQueue(compare = (a, b) => a === b ? 0 : (a > b ? 1 : -1)) {
+function useRemovablePriorityQueue(compare = (a, b) => (a === b ? 0 : a > b ? 1 : -1)) {
     const pq = usePriorityQueue(compare);
     const map = new Map();
     let _size = 0;

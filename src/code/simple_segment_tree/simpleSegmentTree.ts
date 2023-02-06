@@ -96,14 +96,14 @@ function useSimpleSegmentTree<T>(
 
   const query = (left: number, right: number) => {
     if (left > right || left < 0 || right >= n) {
-      throw new Error("left 或 right 超出了范围")
+      throw new Error('left 或 right 超出了范围')
     }
     return queryTree(0, 0, n - 1, left, right)
   }
 
   const update = (index: number, value: T) => {
     if (index < 0 || index >= n) {
-      throw new Error("index 超出了数组范围")
+      throw new Error('index 超出了数组范围')
     }
     updateTree(0, 0, n - 1, index, value)
   }

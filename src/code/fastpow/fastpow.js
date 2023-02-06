@@ -5,9 +5,9 @@ function fastPow(a, n) {
     let b = $(a) % MOD, res = 1n;
     while (n) {
         if (n % 2 === 1) {
-            res = res * b % MOD;
+            res = (res * b) % MOD;
         }
-        b = b * b % MOD;
+        b = (b * b) % MOD;
         n = Math.trunc(n / 2);
     }
     return Number(res % MOD);

@@ -13,6 +13,7 @@ function useUnionFind(n) {
         if (rx === ry)
             return;
         if (size[rx] > size[ry]) {
+            ;
             [rx, ry] = [ry, rx];
         }
         parent[rx] = ry;
@@ -25,6 +26,9 @@ function useUnionFind(n) {
         return size[find(x)];
     }
     return {
-        union, find, isUnion, setSize
+        union,
+        find,
+        isUnion,
+        setSize,
     };
 }

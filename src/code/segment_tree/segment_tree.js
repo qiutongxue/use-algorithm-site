@@ -79,6 +79,6 @@ function useSegmentTree(nums) {
     return {
         updateByIndex,
         updateByInterval,
-        query
+        query,
     };
 }

@@ -22,6 +22,9 @@ function useBIT(nums) {
         return query(right) - query(left - 1);
     }
     return {
-        add, update, query, queryByInterval
+        add,
+        update,
+        query,
+        queryByInterval,
     };
 }

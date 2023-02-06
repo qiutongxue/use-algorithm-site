@@ -1,5 +1,5 @@
 "use strict";
-function usePriorityQueue(compare = (a, b) => a === b ? 0 : (a > b ? 1 : -1)) {
+function usePriorityQueue(compare = (a, b) => (a === b ? 0 : a > b ? 1 : -1)) {
     const data = [];
     function getLeftChildIndex(idx) {
         return (idx << 1) + 1;
@@ -28,8 +28,9 @@ function usePriorityQueue(compare = (a, b) => a === b ? 0 : (a > b ? 1 : -1)) {
         let curr = 0;
         while (getLeftChildIndex(curr) < data.length) {
             let next = getLeftChildIndex(curr);
-            if (getRightChildIndex(curr) < data.length
-                && compare(data[getLeftChildIndex(curr)], data[getRightChildIndex(curr)]) > 0)
+            if (getRightChildIndex(curr) < data.length &&
+                compare(data[getLeftChildIndex(curr)], data[getRightChildIndex(curr)]) >
+                    0)
                 next = getRightChildIndex(curr);
             if (compare(data[curr], data[next]) <= 0)
                 break;
@@ -51,10 +52,14 @@ function usePriorityQueue(compare = (a, b) => a === b ? 0 : (a > b ? 1 : -1)) {
         heapifyDown();
         return result;
     }
-    const peek = () => data.length ? data[0] : null;
+    const peek = () => (data.length ? data[0] : null);
     const size = () => data.length;
     const isEmpty = () => size() === 0;
     return {
-        push, pop, size, isEmpty, peek
+        push,
+        pop,
+        size,
+        isEmpty,
+        peek,
     };
 }
