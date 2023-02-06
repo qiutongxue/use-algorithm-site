@@ -1,6 +1,6 @@
 ---
-import { fetchCodes } from "@/utils/fetchCodes"
-import BaseLayout from "@/layouts/BaseLayout/index.astro"
+import { fetchCodes } from '@/utils/fetchCodes'
+import BaseLayout from '@/layouts/BaseLayout/index.astro'
 const info = await fetchCodes()
 ---
 
@@ -15,41 +15,39 @@ const info = await fetchCodes()
       }, delay)
     }
   }
-  const search = document.querySelector("#search")
+  const search = document.querySelector('#search')
 
-  const posts = document.querySelectorAll(".wrapper .post")
+  const posts = document.querySelectorAll('.wrapper .post')
   search.addEventListener(
-    "input",
+    'input',
     debounce((e: Event) => {
       const target = (e.target as HTMLInputElement).value.toLowerCase()
-      if (target === "") {
-        posts.forEach((post) => post.classList.remove("hidden"))
+      if (target === '') {
+        posts.forEach((post) => post.classList.remove('hidden'))
         return
       }
-      if (target.startsWith(":")) {
+      if (target.startsWith(':')) {
         const targetLang = target.slice(1)
         posts.forEach((post) => {
-          const langs = post.querySelectorAll("[data-lang]")
+          const langs = post.querySelectorAll('[data-lang]')
           if (
             [...langs].some((lang) =>
-              lang.getAttribute("data-lang").includes(targetLang)
+              (lang as HTMLElement).dataset.lang.includes(targetLang)
             )
           ) {
-            post.classList.remove("hidden")
+            post.classList.remove('hidden')
           } else {
-            post.classList.add("hidden")
+            post.classList.add('hidden')
           }
         })
         return
       }
       posts.forEach((post) => {
-        const source = (
-          post.getAttribute("data-search") as string
-        ).toLowerCase()
+        const source = (post as HTMLElement).dataset.search.toLowerCase()
         if (source.includes(target)) {
-          post.classList.remove("hidden")
+          post.classList.remove('hidden')
         } else {
-          post.classList.add("hidden")
+          post.classList.add('hidden')
         }
       })
     }, 200)
@@ -57,31 +55,31 @@ const info = await fetchCodes()
 </script>
 
 <BaseLayout>
-  <div class="root">
-    <div class="main-icon"></div>
-    <div class="search">
-      <input type="text" id="search" name="search-code" />
-      <div class="search-tips">
+  <div class='root'>
+    <div class='main-icon'></div>
+    <div class='search'>
+      <input type='text' id='search' name='search-code' />
+      <div class='search-tips'>
         * 可以输入 <kbd>:[文件名后缀]</kbd> 筛选语言，如 <kbd>:py</kbd>
         <kbd>:js</kbd> 等
       </div>
     </div>
-    <div class="wrapper">
+    <div class='wrapper'>
       {
         Object.entries(info)
           .sort()
           .map(([post, { chName, enName, keywords, codes }]) => (
             <a
-              class="post"
+              class='post'
               href={`tool-codes/${post}`}
-              data-search={keywords || ""}
+              data-search={keywords || ''}
             >
-              <span class="title-main">{chName || enName || post}</span>
-              <span class="title-sub">{enName}</span>
-              <div class="icon-wrapper">
+              <span class='title-main'>{chName || enName || post}</span>
+              <span class='title-sub'>{enName}</span>
+              <div class='icon-wrapper'>
                 {codes &&
                   codes.map(({ lang }) => (
-                    <div class="icon" data-lang={lang} />
+                    <div class='icon' data-lang={lang} />
                   ))}
               </div>
             </a>
@@ -91,7 +89,7 @@ const info = await fetchCodes()
   </div>
 </BaseLayout>
 
-<style lang="scss">
+<style lang='scss'>
   @import url(../styles/iconVars);
   @import url(../styles/datalang);
   * {
@@ -116,7 +114,7 @@ const info = await fetchCodes()
   }
 
   .main-icon {
-    background-image: url("/ua.svg");
+    background-image: url('/ua.svg');
     background-repeat: no-repeat;
     background-size: 32rem;
     margin-top: 10rem;
