@@ -38,6 +38,43 @@ article.code-layout {
     line-height: 1.8;
   }
 
+  li {
+    margin-top: 0.5rem;
+    line-height: 1.5;
+  }
+
+  blockquote {
+    background-color: rgba(0, 0, 0, 0.1);
+    margin-left: 0;
+    margin-right: 0;
+    padding: 1rem 0.5rem 1rem 1.3rem;
+    position: relative;
+    border-radius: 0 0.5rem 0.5rem 0;
+    overflow: hidden;
+  }
+
+  code {
+    display: inline-block;
+    // border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 0.4rem;
+    padding: 0 0.4rem;
+    font-family: 'Maple Mono';
+    font-size: 1rem;
+    font-weight: 500;
+    background-color: white;
+  }
+
+  blockquote::before {
+    content: '';
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 5px;
+    background-color: gray;
+  }
+
   nav.toc {
     position: fixed;
     top: 80px;
