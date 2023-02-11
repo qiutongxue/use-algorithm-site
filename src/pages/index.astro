@@ -186,10 +186,16 @@ const info = await fetchCodes()
             border-radius: 10px;
             min-width: 100px;
 
-            box-shadow: 1px 1px 10px 0px rgba(0, 0, 0, 0.2);
+            box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+
+            transition: 0.5s ease;
 
             &.hidden {
                 display: none;
+            }
+
+            &:hover {
+                background-color: #fafafa;
             }
 
             .title-main {
