@@ -2,7 +2,7 @@
 function useMask(array, m) {
     const nums = [...array];
     const n = nums.length;
-    const pow = new Array(n + 1).fill(0).map((_, idx) => Math.pow(m, idx));
+    const pow = new Array(n + 1).fill(0).map((_, idx) => m ** idx);
     let data = 0;
     for (let i = n - 1; i >= 0; i--) {
         if (typeof nums[i] !== 'number' || nums[i] >= m || nums[i] < 0) {
@@ -10,9 +10,8 @@ function useMask(array, m) {
         }
         data = data * m + nums[i];
     }
-    if (data > Number.MAX_SAFE_INTEGER) {
+    if (data > Number.MAX_SAFE_INTEGER)
         throw new Error('超出最大数字范围，要不还是换个语言吧');
-    }
     const get = (index) => {
         return nums[index];
     };

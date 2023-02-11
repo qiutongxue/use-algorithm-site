@@ -45,36 +45,30 @@ function useSimpleSegmentTree(inputArray, operation, operationFallback) {
             return;
         }
         const { mid, leftNode, rightNode } = getInfo(node, start, end);
-        if (index <= mid) {
+        if (index <= mid)
             updateTree(leftNode, start, mid, index, value);
-        }
-        else {
+        else
             updateTree(rightNode, mid + 1, end, index, value);
-        }
         tree[node] = operate(tree[leftNode], tree[rightNode]);
     }
     function queryTree(node, start, end, left, right) {
-        if (right < start || left > end) {
+        if (right < start || left > end)
             return fallback;
-        }
-        if (left <= start && end <= right) {
+        if (left <= start && end <= right)
             return tree[node];
-        }
         const { mid, leftNode, rightNode } = getInfo(node, start, end);
         const leftResult = queryTree(leftNode, start, mid, left, right);
         const rightResult = queryTree(rightNode, mid + 1, end, left, right);
         return operate(leftResult, rightResult);
     }
     const query = (left, right) => {
-        if (left > right || left < 0 || right >= n) {
-            throw new Error("left 或 right 超出了范围");
-        }
+        if (left > right || left < 0 || right >= n)
+            throw new Error('left 或 right 超出了范围');
         return queryTree(0, 0, n - 1, left, right);
     };
     const update = (index, value) => {
-        if (index < 0 || index >= n) {
-            throw new Error("index 超出了数组范围");
-        }
+        if (index < 0 || index >= n)
+            throw new Error('index 超出了数组范围');
         updateTree(0, 0, n - 1, index, value);
     };
     return {

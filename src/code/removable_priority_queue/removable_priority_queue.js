@@ -4,18 +4,15 @@ function useRemovablePriorityQueue(compare = (a, b) => (a === b ? 0 : a > b ? 1 
     const map = new Map();
     let _size = 0;
     const removeUnusable = () => {
-        while (!pq.isEmpty() && !map.has(pq.peek())) {
+        while (!pq.isEmpty() && !map.has(pq.peek()))
             pq.pop();
-        }
     };
     const del = (e) => {
-        if (!map.has(e)) {
+        if (!map.has(e))
             return false;
-        }
         map.set(e, map.get(e) - 1);
-        if (map.get(e) <= 0) {
+        if (map.get(e) <= 0)
             map.delete(e);
-        }
         return true;
     };
     const push = (e) => {
@@ -29,9 +26,8 @@ function useRemovablePriorityQueue(compare = (a, b) => (a === b ? 0 : a > b ? 1 
     };
     const pop = () => {
         removeUnusable();
-        if (pq.isEmpty()) {
+        if (pq.isEmpty())
             return null;
-        }
         const res = pq.pop();
         _size--;
         del(res);
@@ -39,9 +35,8 @@ function useRemovablePriorityQueue(compare = (a, b) => (a === b ? 0 : a > b ? 1 
     };
     const remove = (e) => {
         const hasElement = del(e);
-        if (hasElement) {
+        if (hasElement)
             _size--;
-        }
         return hasElement;
     };
     const size = () => _size;

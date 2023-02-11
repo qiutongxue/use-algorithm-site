@@ -44,21 +44,17 @@ function useSegmentTree(nums) {
         const mid = getMid(start, end);
         const leftNode = getLeftNode(node);
         const rightNode = getRightNode(node);
-        if (left <= mid) {
+        if (left <= mid)
             updateTree(leftNode, start, mid, left, right, val);
-        }
-        if (right > mid) {
+        if (right > mid)
             updateTree(rightNode, mid + 1, end, left, right, val);
-        }
         tree[node] = tree[leftNode] + tree[rightNode];
     }
     function queryTree(node, start, end, left, right) {
-        if (right < start || left > end) {
+        if (right < start || left > end)
             return 0;
-        }
-        if (start >= left && end <= right) {
+        if (start >= left && end <= right)
             return tree[node];
-        }
         pushDown(node, start, end);
         const mid = getMid(start, end);
         const leftNode = getLeftNode(node);

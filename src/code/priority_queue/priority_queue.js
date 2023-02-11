@@ -28,9 +28,8 @@ function usePriorityQueue(compare = (a, b) => (a === b ? 0 : a > b ? 1 : -1)) {
         let curr = 0;
         while (getLeftChildIndex(curr) < data.length) {
             let next = getLeftChildIndex(curr);
-            if (getRightChildIndex(curr) < data.length &&
-                compare(data[getLeftChildIndex(curr)], data[getRightChildIndex(curr)]) >
-                    0)
+            if (getRightChildIndex(curr) < data.length
+                && compare(data[getLeftChildIndex(curr)], data[getRightChildIndex(curr)]) > 0)
                 next = getRightChildIndex(curr);
             if (compare(data[curr], data[next]) <= 0)
                 break;

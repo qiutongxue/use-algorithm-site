@@ -3,116 +3,121 @@ import CodeBlock from './CodeBlock.astro'
 import type { Props as CodeBlockProps } from './CodeBlock.astro'
 import { langMapper } from '@/utils/langMapper'
 export interface Props {
-  groups: CodeBlockProps[]
+    groups: CodeBlockProps[]
 }
 
 const { groups } = Astro.props
 ---
 
 <script>
-  const codeGroups = document.querySelectorAll('.code-group')
-  codeGroups.forEach((codeGroup) => {
-    const labels = codeGroup.querySelectorAll('.code-group-label')
-    labels.forEach((label) => {
-      label.addEventListener('click', () => {
-        labels.forEach((label) => label.classList.remove('checked'))
-        label.classList.add('checked')
-      })
+    const codeGroups = document.querySelectorAll('.code-group')
+    codeGroups.forEach((codeGroup) => {
+        const labels = codeGroup.querySelectorAll('.code-group-label')
+        labels.forEach((label) => {
+            label.addEventListener('click', () => {
+                labels.forEach((label) => label.classList.remove('checked'))
+                label.classList.add('checked')
+            })
+        })
     })
-  })
 </script>
 
 <div class='code-group'>
-  <div class='code-group-labels'>
-    {
-      groups.map(({ lang }, idx) => (
-        <div
-          class:list={['code-group-label', idx === 0 ? 'checked' : '']}
-          data-lang={lang}
-        >
-          <label for={`code-group-${lang}`}>{langMapper(lang as string)}</label>
-        </div>
-      ))
-    }
-  </div>
+    <div class='code-group-labels'>
+        {
+            groups.map(({ lang }, idx) => (
+                <div
+                    class:list={[
+                        'code-group-label',
+                        idx === 0 ? 'checked' : '',
+                    ]}
+                    data-lang={lang}
+                >
+                    <label for={`code-group-${lang}`}>
+                        {langMapper(lang as string)}
+                    </label>
+                </div>
+            ))
+        }
+    </div>
 
-  <div class='code-group-container'>
-    {
-      groups.map(({ code, lang }, idx) => (
-        <>
-          <input
-            type='radio'
-            class='code-group-input'
-            name='code-group'
-            id={`code-group-${lang}`}
-            checked={idx === 0}
-          />
-          <CodeBlock code={code} lang={lang} />
-        </>
-      ))
-    }
-  </div>
+    <div class='code-group-container'>
+        {
+            groups.map(({ code, lang }, idx) => (
+                <>
+                    <input
+                        type='radio'
+                        class='code-group-input'
+                        name='code-group'
+                        id={`code-group-${lang}`}
+                        checked={idx === 0}
+                    />
+                    <CodeBlock code={code} lang={lang} />
+                </>
+            ))
+        }
+    </div>
 </div>
 
 <style lang='scss' is:global>
-  @import url(../styles/iconVars);
-  @import url(../styles/datalang);
+    @import url(../styles/iconVars);
+    @import url(../styles/datalang);
 
-  .code-group {
-    margin-top: 2.5rem;
-    .code-group-labels {
-      display: flex;
-      justify-content: start;
-      align-items: center;
-      flex-wrap: wrap;
+    .code-group {
+        margin-top: 2.5rem;
+        .code-group-labels {
+            display: flex;
+            justify-content: start;
+            align-items: center;
+            flex-wrap: wrap;
 
-      .code-group-label {
-        display: flex;
-        align-items: center;
-        font-weight: bold;
-        font-size: 0.93rem;
-        cursor: pointer;
-        border-radius: 5px;
-        position: relative;
+            .code-group-label {
+                display: flex;
+                align-items: center;
+                font-weight: bold;
+                font-size: 0.93rem;
+                cursor: pointer;
+                border-radius: 5px;
+                position: relative;
 
-        background-repeat: no-repeat;
-        background-size: 1.5rem;
-        background-position: 0.5rem 50%;
+                background-repeat: no-repeat;
+                background-size: 1.5rem;
+                background-position: 0.5rem 50%;
 
-        margin-right: 0.8rem;
-        margin-top: 0.5rem;
+                margin-right: 0.8rem;
+                margin-top: 0.5rem;
 
-        transition: 0.5s ease;
+                transition: 0.5s ease;
 
-        &:not(:last-child)::after {
-          content: '|';
-          position: absolute;
-          right: -0.6rem;
-          color: rgba(0, 0, 0, 0.2);
+                &:not(:last-child)::after {
+                    content: '|';
+                    position: absolute;
+                    right: -0.6rem;
+                    color: rgba(0, 0, 0, 0.2);
+                }
+
+                &:hover {
+                    background-color: rgba(0, 0, 0, 0.1);
+                }
+
+                &.checked {
+                    background-color: rgba(155, 155, 155, 0.2);
+                }
+
+                label {
+                    padding: 1rem 0.5rem 1rem 2.5rem;
+                    cursor: pointer;
+                    user-select: none;
+                }
+            }
         }
 
-        &:hover {
-          background-color: rgba(0, 0, 0, 0.1);
-        }
+        .code-group-input {
+            display: none;
 
-        &.checked {
-          background-color: rgba(155, 155, 155, 0.2);
+            &:not(:checked) + .code-block {
+                display: none;
+            }
         }
-
-        label {
-          padding: 1rem 0.5rem 1rem 2.5rem;
-          cursor: pointer;
-          user-select: none;
-        }
-      }
     }
-
-    .code-group-input {
-      display: none;
-
-      &:not(:checked) + .code-block {
-        display: none;
-      }
-    }
-  }
 </style>

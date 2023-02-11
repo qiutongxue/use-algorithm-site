@@ -13,18 +13,18 @@ const info = await fetchCodes()
 const codes = info[currentPost]?.codes || []
 
 const title =
-  frontmatter.title ||
-  info[currentPost]?.chName ||
-  info[currentPost]?.enName ||
-  currentPost
+    frontmatter.title ||
+    info[currentPost]?.chName ||
+    info[currentPost]?.enName ||
+    currentPost
 ---
 
 <BaseLayout frontmatter={frontmatter}>
-  <div class='root'>
-    <article class='code-layout'>
-      <h1>{title}</h1>
-      <slot />
-      {codes.length && <Code groups={codes} />}
-    </article>
-  </div>
+    <div class='root'>
+        <article class='code-layout'>
+            <h1>{title}</h1>
+            <slot />
+            {codes.length && <Code groups={codes} />}
+        </article>
+    </div>
 </BaseLayout>

@@ -10,7 +10,7 @@ function useManacher(s: string) {
   const dp: number[] = new Array(n).fill(0)
   for (let i = 0, l = 0, r = -1; i < n; i++) {
     let k = i > r ? 1 : Math.min(dp[l + r - i], r - i + 1)
-    while (0 <= i - k && i + k < n && char[i - k] === char[i + k]) k++
+    while (i - k >= 0 && i + k < n && char[i - k] === char[i + k]) k++
 
     dp[i] = k--
 

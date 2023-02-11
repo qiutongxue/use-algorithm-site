@@ -27,7 +27,8 @@ function useSegmentTree(nums: number[]) {
   buildTree(0, 0, n - 1)
 
   function pushDown(node: number, start: number, end: number) {
-    if (lazy[node] === UNUSE) return
+    if (lazy[node] === UNUSE)
+      return
     const leftNode = getLeftNode(node)
     const rightNode = getRightNode(node)
     const mid = getMid(start, end)
@@ -47,7 +48,7 @@ function useSegmentTree(nums: number[]) {
     end: number,
     left: number,
     right: number,
-    val: number
+    val: number,
   ) {
     if (left <= start && end <= right) {
       // 如果方案为区间增值，把下面两个 = 改成 += 即可
@@ -62,12 +63,11 @@ function useSegmentTree(nums: number[]) {
     const leftNode = getLeftNode(node)
     const rightNode = getRightNode(node)
 
-    if (left <= mid) {
+    if (left <= mid)
       updateTree(leftNode, start, mid, left, right, val)
-    }
-    if (right > mid) {
+
+    if (right > mid)
       updateTree(rightNode, mid + 1, end, left, right, val)
-    }
 
     tree[node] = tree[leftNode] + tree[rightNode]
   }
@@ -77,14 +77,13 @@ function useSegmentTree(nums: number[]) {
     start: number,
     end: number,
     left: number,
-    right: number
+    right: number,
   ): number {
-    if (right < start || left > end) {
+    if (right < start || left > end)
       return 0
-    }
-    if (start >= left && end <= right) {
+
+    if (start >= left && end <= right)
       return tree[node]
-    }
 
     pushDown(node, start, end)
 

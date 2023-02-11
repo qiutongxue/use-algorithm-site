@@ -5,143 +5,144 @@ import { Code } from 'astro/components'
 import type { Props as CodeProps } from 'astro/components/Code.astro'
 
 export interface Props {
-  code: string
-  lang: CodeProps['lang']
+    code: string
+    lang: CodeProps['lang']
 }
 
 const { code, lang } = Astro.props
 ---
 
 <script>
-  // 复制代码
-  const copyButtons = document.querySelectorAll('.code-block button.copy')
-  copyButtons.forEach((button) => {
-    button.addEventListener('click', () => {
-      if (button.classList.contains('copied')) return
-      const code = button.parentElement.querySelector('pre code').textContent
-      navigator.clipboard.writeText(code).then(() => {
-        button.classList.add('copied')
-        setTimeout(() => {
-          button.classList.remove('copied')
-        }, 1500)
-      })
+    // 复制代码
+    const copyButtons = document.querySelectorAll('.code-block button.copy')
+    copyButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+            if (button.classList.contains('copied')) return
+            const code =
+                button.parentElement.querySelector('pre code').textContent
+            navigator.clipboard.writeText(code).then(() => {
+                button.classList.add('copied')
+                setTimeout(() => {
+                    button.classList.remove('copied')
+                }, 1500)
+            })
+        })
     })
-  })
 </script>
 
 <div class='code-block'>
-  <button class='copy'></button>
-  <span class='lang'>{lang}</span>
-  <Code code={code} lang={lang} />
+    <button class='copy'></button>
+    <span class='lang'>{lang}</span>
+    <Code code={code} lang={lang} />
 </div>
 
 <style is:global>
-  :root {
-    --code-block-background-color: #292d3e;
+    :root {
+        --code-block-background-color: #292d3e;
 
-    --code-block-copied-icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxZW0iIGhlaWdodD0iMWVtIiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxnIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzg4ODg4OCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBzdHJva2Utd2lkdGg9IjIiPjxyZWN0IHdpZHRoPSI4IiBoZWlnaHQ9IjQiIHg9IjgiIHk9IjIiIHJ4PSIxIiByeT0iMSIvPjxwYXRoIGQ9Ik0xNiA0aDJhMiAyIDAgMCAxIDIgMnYxNGEyIDIgMCAwIDEtMiAySDZhMiAyIDAgMCAxLTItMlY2YTIgMiAwIDAgMSAyLTJoMiIvPjxwYXRoIGQ9Im05IDE0bDIgMmw0LTQiLz48L2c+PC9zdmc+);
-    --code-block-copy-icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxZW0iIGhlaWdodD0iMWVtIiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxnIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzg4ODg4OCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBzdHJva2Utd2lkdGg9IjIiPjxyZWN0IHdpZHRoPSI4IiBoZWlnaHQ9IjQiIHg9IjgiIHk9IjIiIHJ4PSIxIiByeT0iMSIvPjxwYXRoIGQ9Ik0xNiA0aDJhMiAyIDAgMCAxIDIgMnYxNGEyIDIgMCAwIDEtMiAySDZhMiAyIDAgMCAxLTItMlY2YTIgMiAwIDAgMSAyLTJoMiIvPjwvZz48L3N2Zz4=);
-  }
-  .code-block {
-    position: relative;
-    box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.3);
-    border-radius: 0.8rem;
-    margin: 1rem 0;
-    overflow: hidden;
-  }
-  .code-block > pre {
-    padding: 1rem 0;
-    line-height: 1.5;
-    margin: 0;
-    overflow: auto;
-    font-size: 0.9rem;
-    background-color: var(--code-block-background-color) !important;
-  }
+        --code-block-copied-icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxZW0iIGhlaWdodD0iMWVtIiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxnIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzg4ODg4OCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBzdHJva2Utd2lkdGg9IjIiPjxyZWN0IHdpZHRoPSI4IiBoZWlnaHQ9IjQiIHg9IjgiIHk9IjIiIHJ4PSIxIiByeT0iMSIvPjxwYXRoIGQ9Ik0xNiA0aDJhMiAyIDAgMCAxIDIgMnYxNGEyIDIgMCAwIDEtMiAySDZhMiAyIDAgMCAxLTItMlY2YTIgMiAwIDAgMSAyLTJoMiIvPjxwYXRoIGQ9Im05IDE0bDIgMmw0LTQiLz48L2c+PC9zdmc+);
+        --code-block-copy-icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxZW0iIGhlaWdodD0iMWVtIiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxnIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzg4ODg4OCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBzdHJva2Utd2lkdGg9IjIiPjxyZWN0IHdpZHRoPSI4IiBoZWlnaHQ9IjQiIHg9IjgiIHk9IjIiIHJ4PSIxIiByeT0iMSIvPjxwYXRoIGQ9Ik0xNiA0aDJhMiAyIDAgMCAxIDIgMnYxNGEyIDIgMCAwIDEtMiAySDZhMiAyIDAgMCAxLTItMlY2YTIgMiAwIDAgMSAyLTJoMiIvPjwvZz48L3N2Zz4=);
+    }
+    .code-block {
+        position: relative;
+        box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.3);
+        border-radius: 0.8rem;
+        margin: 1rem 0;
+        overflow: hidden;
+    }
+    .code-block > pre {
+        padding: 1rem 0;
+        line-height: 1.5;
+        margin: 0;
+        overflow: auto;
+        font-size: 0.9rem;
+        background-color: var(--code-block-background-color) !important;
+    }
 
-  .code-block > pre::-webkit-scrollbar {
-    height: 12px;
-    background-color: var(--code-block-background-color);
-  }
+    .code-block > pre::-webkit-scrollbar {
+        height: 12px;
+        background-color: var(--code-block-background-color);
+    }
 
-  .code-block > pre::-webkit-scrollbar-thumb {
-    background-color: rgb(189, 188, 188);
-    border-radius: 6px;
-  }
+    .code-block > pre::-webkit-scrollbar-thumb {
+        background-color: rgb(189, 188, 188);
+        border-radius: 6px;
+    }
 
-  .code-block pre.astro-code > code {
-    all: unset;
-    font-family: 'Maple Mono', serif;
-    min-width: 100%;
-    display: inline-block;
-    word-break: break-word;
-  }
+    .code-block pre.astro-code > code {
+        all: unset;
+        font-family: 'Maple Mono', serif;
+        min-width: 100%;
+        display: inline-block;
+        word-break: break-word;
+    }
 
-  .code-block pre > code > .line {
-    display: inline-block;
-    padding-inline-start: 1.25rem;
-    padding-inline-end: 1.25rem;
-  }
+    .code-block pre > code > .line {
+        display: inline-block;
+        padding-inline-start: 1.25rem;
+        padding-inline-end: 1.25rem;
+    }
 </style>
 
 <style>
-  button.copy {
-    position: absolute;
-    right: 8px;
-    top: 8px;
-    display: block;
-    width: 40px;
-    height: 40px;
-    z-index: 3;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: var(--code-block-background-color);
-    background-image: var(--code-block-copy-icon);
-    background-repeat: no-repeat;
-    background-size: 20px;
-    background-position: 50% 50%;
-    border-radius: 4px;
-    border: 0;
-    color: white;
-    opacity: 0;
-    padding: 10px;
-    transition: opacity 0.4s;
-  }
+    button.copy {
+        position: absolute;
+        right: 8px;
+        top: 8px;
+        display: block;
+        width: 40px;
+        height: 40px;
+        z-index: 3;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: var(--code-block-background-color);
+        background-image: var(--code-block-copy-icon);
+        background-repeat: no-repeat;
+        background-size: 20px;
+        background-position: 50% 50%;
+        border-radius: 4px;
+        border: 0;
+        color: white;
+        opacity: 0;
+        padding: 10px;
+        transition: opacity 0.4s;
+    }
 
-  button.copy:hover {
-    background-color: rgba(255, 255, 255, 0.05);
-  }
+    button.copy:hover {
+        background-color: rgba(255, 255, 255, 0.05);
+    }
 
-  .code-block:hover button.copy {
-    opacity: 1;
-  }
+    .code-block:hover button.copy {
+        opacity: 1;
+    }
 
-  button.copy.copied {
-    background-image: var(--code-block-copied-icon);
-    background-color: rgba(255, 255, 255, 0.05);
+    button.copy.copied {
+        background-image: var(--code-block-copied-icon);
+        background-color: rgba(255, 255, 255, 0.05);
 
-    opacity: 1;
-    cursor: default;
-  }
+        opacity: 1;
+        cursor: default;
+    }
 
-  .code-block .lang {
-    position: absolute;
-    right: 12px;
-    top: 12px;
-    color: white;
-    z-index: 2;
-    font-size: 12px;
-    font-weight: 500;
-    color: rgba(235, 235, 235, 0.38);
-    transition: color 0.4s, opacity 0.4s;
-  }
+    .code-block .lang {
+        position: absolute;
+        right: 12px;
+        top: 12px;
+        color: white;
+        z-index: 2;
+        font-size: 12px;
+        font-weight: 500;
+        color: rgba(235, 235, 235, 0.38);
+        transition: color 0.4s, opacity 0.4s;
+    }
 
-  .code-block:hover .lang {
-    opacity: 0;
-  }
+    .code-block:hover .lang {
+        opacity: 0;
+    }
 
-  .code-block > button.copied + span.lang {
-    opacity: 0;
-  }
+    .code-block > button.copied + span.lang {
+        opacity: 0;
+    }
 </style>

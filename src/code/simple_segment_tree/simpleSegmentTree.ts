@@ -1,7 +1,7 @@
 function useSimpleSegmentTree<T>(
   inputArray: T[],
   operation: (a: T, b: T) => T,
-  operationFallback: T
+  operationFallback: T,
 ) {
   const operate = operation
   const fallback = operationFallback
@@ -26,7 +26,8 @@ function useSimpleSegmentTree<T>(
     if (Number.isInteger(Math.log2(length))) {
       // 正好占据完美二叉树的所有叶子节点
       treeLength = 2 * length - 1
-    } else {
+    }
+    else {
       const pow = Math.ceil(Math.log2(length))
       treeLength = 2 * 2 ** pow - 1
     }
@@ -55,7 +56,7 @@ function useSimpleSegmentTree<T>(
     start: number,
     end: number,
     index: number,
-    value: T
+    value: T,
   ) {
     if (start === end && index === start) {
       tree[node] = value
@@ -63,11 +64,11 @@ function useSimpleSegmentTree<T>(
     }
     const { mid, leftNode, rightNode } = getInfo(node, start, end)
 
-    if (index <= mid) {
+    if (index <= mid)
       updateTree(leftNode, start, mid, index, value)
-    } else {
+
+    else
       updateTree(rightNode, mid + 1, end, index, value)
-    }
 
     tree[node] = operate(tree[leftNode], tree[rightNode])
   }
@@ -77,14 +78,13 @@ function useSimpleSegmentTree<T>(
     start: number,
     end: number,
     left: number,
-    right: number
+    right: number,
   ): T {
-    if (right < start || left > end) {
+    if (right < start || left > end)
       return fallback
-    }
-    if (left <= start && end <= right) {
+
+    if (left <= start && end <= right)
       return tree[node]
-    }
 
     const { mid, leftNode, rightNode } = getInfo(node, start, end)
 
@@ -95,16 +95,16 @@ function useSimpleSegmentTree<T>(
   }
 
   const query = (left: number, right: number) => {
-    if (left > right || left < 0 || right >= n) {
+    if (left > right || left < 0 || right >= n)
       throw new Error('left 或 right 超出了范围')
-    }
+
     return queryTree(0, 0, n - 1, left, right)
   }
 
   const update = (index: number, value: T) => {
-    if (index < 0 || index >= n) {
+    if (index < 0 || index >= n)
       throw new Error('index 超出了数组范围')
-    }
+
     updateTree(0, 0, n - 1, index, value)
   }
 

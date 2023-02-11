@@ -16,7 +16,8 @@ const langMapper = {
 let cache: Record<string, CodeProps> | null = null
 
 export async function fetchCodes() {
-  if (!cache) await fetch()
+  if (!cache)
+    await fetch()
   return cache
 }
 
@@ -29,13 +30,14 @@ async function fetch() {
     const ext = extname(path).slice(1)
     const lang = langMapper[ext] || ext
     const post = dirname(path).split('/').at(-1)
-    if (!post || post === 'code') continue
+    if (!post || post === 'code')
+      continue
 
     const obj = cache[post] || (cache[post] = {} as CodeProps)
 
     obj.enName ??= post
       .split('_')
-      .map((word) => word.at(0)?.toUpperCase() + word.slice(1))
+      .map(word => word.at(0)?.toUpperCase() + word.slice(1))
       .join(' ')
 
     if (!lang) {
@@ -53,11 +55,11 @@ async function fetch() {
 
   for (const [post, props] of Object.entries(cache)) {
     props.codes.sort(
-      (a, b) => priority.indexOf(a.lang) - priority.indexOf(b.lang)
+      (a, b) => priority.indexOf(a.lang) - priority.indexOf(b.lang),
     )
     props.keywords = `${props.enName} ${props.chName} ${post} ${props.enName
       .split(' ')
-      .map((s) => s.at(0))
+      .map(s => s.at(0))
       .join('')}`.toLowerCase()
   }
 }

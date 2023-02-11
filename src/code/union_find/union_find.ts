@@ -3,18 +3,19 @@ function useUnionFind(n: number) {
   const size: number[] = new Array(n).fill(1)
 
   function find(x: number) {
-    if (parent[x] !== x) {
+    if (parent[x] !== x)
       parent[x] = find(parent[x])
-    }
+
     return parent[x]
   }
   function union(x: number, y: number) {
-    let rx = find(x),
-      ry = find(y)
-    if (rx === ry) return
-    if (size[rx] > size[ry]) {
-      ;[rx, ry] = [ry, rx]
-    }
+    let rx = find(x)
+    let ry = find(y)
+    if (rx === ry)
+      return
+    if (size[rx] > size[ry])
+      [rx, ry] = [ry, rx]
+
     parent[rx] = ry
     size[ry] += size[rx]
   }

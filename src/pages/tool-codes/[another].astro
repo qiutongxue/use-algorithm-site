@@ -1,28 +1,28 @@
 ---
-import ToolCodeLayout from "@/layouts/ToolCodeLayout/index.astro"
-import { fetchCodes } from "@/utils/fetchCodes"
+import ToolCodeLayout from '@/layouts/ToolCodeLayout/index.astro'
+import { fetchCodes } from '@/utils/fetchCodes'
 
 export async function getStaticPaths() {
-  const info = await fetchCodes()
-  const exists = (await Astro.glob("./*.{md,mdx}")).map(({ url }) =>
-    url.split("/").at(-1)
-  )
+    const info = await fetchCodes()
+    const exists = (await Astro.glob('./*.{md,mdx}')).map(({ url }) =>
+        url.split('/').at(-1)
+    )
 
-  const paths = Object.keys(info)
-    .filter((page) => !exists.includes(page))
-    .map((page) => {
-      return {
-        params: { another: page },
-        props: {
-          frontmatter: {
-            title: info[page]?.chName || info[page]?.enName,
-            url: page,
-          },
-        },
-      }
-    })
+    const paths = Object.keys(info)
+        .filter((page) => !exists.includes(page))
+        .map((page) => {
+            return {
+                params: { another: page },
+                props: {
+                    frontmatter: {
+                        title: info[page]?.chName || info[page]?.enName,
+                        url: page,
+                    },
+                },
+            }
+        })
 
-  return paths
+    return paths
 }
 
 const { frontmatter } = Astro.props
