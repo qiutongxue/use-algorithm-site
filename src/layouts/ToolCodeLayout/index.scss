@@ -107,3 +107,35 @@ article.code-layout {
         }
     }
 }
+
+.leetcode-block {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 1rem 0;
+
+    a.leetcode-item {
+        text-decoration: none;
+        color: #555;
+        font-weight: bold;
+        display: block;
+        margin-top: 1rem;
+        margin-right: 1.2rem;
+        padding: 1rem 1rem 1rem 3rem;
+        position: relative;
+        box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2),
+            -1px -1px 5px rgba(255, 255, 255, 0.8);
+
+        border-radius: 0.5rem;
+
+        background-image: var(--icon-leetcode);
+        background-repeat: no-repeat;
+        background-size: 2rem;
+        background-position: 0.5rem 50%;
+
+        transition: 0.5s ease;
+
+        &:hover {
+            background-color: #efefef;
+        }
+    }
+}
