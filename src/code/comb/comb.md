@@ -1,6 +1,11 @@
 ---
 math: true
 ---
+:::leetcode
+[1830. 使字符串有序的最少操作次数](https://leetcode-cn.com/problems/minimum-number-of-operations-to-make-string-sorted/)
+
+[2514. 统计同位异构字符串数目](https://leetcode.cn/problems/count-anagrams/)
+:::
 
 我们知道计算组合数的公式：
 
