@@ -1,0 +1,43 @@
+---
+import ToolCodeLayout from '@/layouts/ToolCodeLayout/index.astro'
+import { fetchCodes } from '@/utils/fetchCodes'
+
+export async function getStaticPaths() {
+    const info = await fetchCodes()
+    // 提取出带有 markdown 的算法
+    const posts = await Astro.glob('/src/code/**/*.md')
+    const postMap = new Map(
+        posts.map((post) => {
+            // 不在 pages 文件夹下，所以 url 为空，只能用 file
+            const { file } = post
+            // **/[page]/[filename].[extname]
+            const page = file.split('/').at(-2)
+            return [page, post]
+        })
+    )
+
+    const paths = Object.keys(info).map((page) => {
+        const post = postMap.get(page) ?? { frontmatter: {} }
+        return {
+            params: { code: page },
+            props: {
+                post,
+                frontmatter: {
+                    ...post.frontmatter,
+                    title: info[page]?.chName || info[page]?.enName,
+                    url: page,
+                },
+            },
+        }
+    })
+
+    return paths
+}
+
+const { frontmatter } = Astro.props
+const { Content } = Astro.props.post
+---
+
+<ToolCodeLayout frontmatter={frontmatter}>
+    {Content ? <Content /> : <></>}
+</ToolCodeLayout>

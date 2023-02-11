@@ -1,5 +1,4 @@
 ---
-layout: '@/layouts/ToolCodeLayout/index.astro'
 math: true
 ---
 

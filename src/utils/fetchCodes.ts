@@ -23,7 +23,13 @@ export async function fetchCodes() {
 
 async function fetch() {
   cache = {}
-  const globs = import.meta.glob('/src/code/**/*', { as: 'raw' })
+  const globs = import.meta.glob(
+    [
+      '/src/code/**/*',
+      '!/src/code/**/*.md',
+    ],
+    { as: 'raw' },
+  )
 
   for (const [path, promise] of Object.entries<() => Promise<string>>(globs)) {
     const code = await promise()
