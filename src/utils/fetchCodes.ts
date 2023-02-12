@@ -32,12 +32,12 @@ async function fetch() {
   )
 
   for (const [path, promise] of Object.entries<() => Promise<string>>(globs)) {
-    const code = await promise()
     const ext = extname(path).slice(1)
     const lang = langMapper[ext] || ext
     const post = dirname(path).split('/').at(-1)
     if (!post || post === 'code')
       continue
+    const code = removeHiddens(await promise())
 
     const obj = cache[post] || (cache[post] = {} as CodeProps)
 
@@ -68,4 +68,21 @@ async function fetch() {
       .map(s => s.at(0))
       .join('')}`.toLowerCase()
   }
+}
+
+function removeHiddens(code: string) {
+  const lines = code.split('\r\n')
+  const newLines: string[] = []
+  for (let i = 0; i < lines.length; i++) {
+    if (lines[i].includes('--{{begin}}--')) {
+      let j = i + 1
+      while (j < lines.length && !lines[j].includes('--{{end}}--')) j++
+      if (j < lines.length) {
+        i = j
+        continue
+      }
+    }
+    newLines.push(lines[i])
+  }
+  return newLines.join('\r\n')
 }
