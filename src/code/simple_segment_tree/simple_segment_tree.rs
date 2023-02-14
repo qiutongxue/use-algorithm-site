@@ -78,14 +78,7 @@ where
         self.tree[node] = self.operate.as_ref()(self.tree[left_node], self.tree[right_node]);
     }
 
-    fn query_tree(
-        &mut self,
-        node: usize,
-        start: usize,
-        end: usize,
-        left: usize,
-        right: usize,
-    ) -> T {
+    fn query_tree(&self, node: usize, start: usize, end: usize, left: usize, right: usize) -> T {
         if right < start || left > end {
             return self.fallback;
         }
@@ -101,7 +94,7 @@ where
         self.operate.as_ref()(left_result, right_result)
     }
 
-    pub fn query(&mut self, left: usize, right: usize) -> T {
+    pub fn query(&self, left: usize, right: usize) -> T {
         let n = self.array.len();
         if left > right || right >= self.array.len() {
             panic!("超出范围");
