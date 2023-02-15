@@ -1,22 +1,20 @@
-pub struct SegmentTree<T>
+pub struct SegmentTree<T, F>
 where
     T: Clone + Copy,
+    F: Fn(T, T) -> T,
 {
     tree: Vec<T>,
     array: Vec<T>,
-    operate: Box<dyn Fn(T, T) -> T>,
+    operate: F,
     fallback: T,
 }
 
-impl<T> SegmentTree<T>
+impl<T, F> SegmentTree<T, F>
 where
     T: Clone + Copy,
+    F: Fn(T, T) -> T,
 {
-    pub fn new(
-        input_array: &Vec<T>,
-        operation: Box<dyn Fn(T, T) -> T>,
-        operation_fallback: T,
-    ) -> Self {
+    pub fn new(input_array: &Vec<T>, operation: F, operation_fallback: T) -> Self {
         let operate = operation;
         let fallback = operation_fallback;
         let array: Vec<T> = input_array.iter().map(|&x| x).collect();
@@ -59,7 +57,7 @@ where
 
         self.build_tree(left_node, start, mid);
         self.build_tree(right_node, mid + 1, end);
-        self.tree[node] = self.operate.as_ref()(self.tree[left_node], self.tree[right_node]);
+        self.tree[node] = (self.operate)(self.tree[left_node], self.tree[right_node]);
     }
 
     fn update_tree(&mut self, node: usize, start: usize, end: usize, index: usize, value: T) {
@@ -75,7 +73,7 @@ where
             self.update_tree(right_node, mid + 1, end, index, value);
         }
 
-        self.tree[node] = self.operate.as_ref()(self.tree[left_node], self.tree[right_node]);
+        self.tree[node] = (self.operate)(self.tree[left_node], self.tree[right_node]);
     }
 
     fn query_tree(&self, node: usize, start: usize, end: usize, left: usize, right: usize) -> T {
@@ -91,7 +89,7 @@ where
         let left_result = self.query_tree(left_node, start, mid, left, right);
         let right_result = self.query_tree(right_node, mid + 1, end, left, right);
 
-        self.operate.as_ref()(left_result, right_result)
+        (self.operate)(left_result, right_result)
     }
 
     pub fn query(&self, left: usize, right: usize) -> T {
