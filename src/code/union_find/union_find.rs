@@ -1,6 +1,7 @@
 struct UnionFind {
     parent: Vec<usize>,
     size: Vec<usize>,
+    groups: i32,
 }
 
 impl UnionFind {
@@ -12,7 +13,7 @@ impl UnionFind {
             .collect::<Vec<usize>>();
 
         let size = vec![1; n];
-        Self { parent, size }
+        Self { parent, size, groups: n as i32 }
     }
 
     fn find(&mut self, x: usize) -> usize {
@@ -27,8 +28,11 @@ impl UnionFind {
         if rx == ry {
             return;
         }
+        self.groups -= 1;
         if self.size[rx] > self.size[ry] {
-            (rx, ry) = (ry, rx);
+            let t = rx;
+            rx = ry;
+            ry = t;
         }
         self.parent[rx] = ry;
         self.size[ry] += self.size[rx];
