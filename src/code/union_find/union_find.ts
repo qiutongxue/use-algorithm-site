@@ -12,12 +12,13 @@ function useUnionFind(n: number) {
     let rx = find(x)
     let ry = find(y)
     if (rx === ry)
-      return
+      return false
     if (size[rx] > size[ry])
       [rx, ry] = [ry, rx]
 
     parent[rx] = ry
     size[ry] += size[rx]
+    return true
   }
 
   function isUnion(x: number, y: number) {

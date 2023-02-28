@@ -23,10 +23,10 @@ impl UnionFind {
         self.parent[x]
     }
 
-    fn union(&mut self, x: usize, y: usize) {
+    fn union(&mut self, x: usize, y: usize) -> bool {
         let (mut rx, mut ry) = (self.find(x), self.find(y));
         if rx == ry {
-            return;
+            return false;
         }
         self.groups -= 1;
         if self.size[rx] > self.size[ry] {
@@ -36,5 +36,6 @@ impl UnionFind {
         }
         self.parent[rx] = ry;
         self.size[ry] += self.size[rx];
+        true
     }
 }
