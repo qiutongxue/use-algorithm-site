@@ -17,6 +17,16 @@ function useTrie() {
         }
         node.isEnd = true;
     }
+    function search(word) {
+        let node = root;
+        for (let i = 0; i < word.length; i++) {
+            const c = word[i].charCodeAt(0) - 'a'.charCodeAt(0);
+            if (!node.children[c])
+                return false;
+            node = node.children[c];
+        }
+        return node.isEnd;
+    }
     function startsWith(prefix) {
         let node = root;
         for (let i = 0; i < prefix.length; i++) {
@@ -29,6 +39,7 @@ function useTrie() {
     }
     return {
         insert,
+        search,
         startsWith,
     };
 }
