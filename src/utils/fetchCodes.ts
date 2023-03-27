@@ -21,6 +21,15 @@ export async function fetchCodes() {
   return cache
 }
 
+const plugins: ((code: string) => string)[] = []
+
+export function addPlugin(plugin: (code: string) => string) {
+  plugins.push(plugin)
+}
+
+addPlugin((code: string) => convertTabToSpace(code, 4))
+addPlugin(removeHiddens)
+
 async function fetch() {
   cache = {}
   const globs = import.meta.glob(
@@ -37,7 +46,9 @@ async function fetch() {
     const post = dirname(path).split('/').at(-1)
     if (!post || post === 'code')
       continue
-    const code = removeHiddens(await promise())
+    const rawCode = await promise()
+
+    const code = plugins.reduce((code, plugin) => plugin(code), rawCode)
 
     const obj = cache[post] || (cache[post] = {} as CodeProps)
 
@@ -85,4 +96,8 @@ function removeHiddens(code: string) {
     newLines.push(lines[i])
   }
   return newLines.join('\r\n')
+}
+
+function convertTabToSpace(code: string, spaceCount = 4) {
+  return code.replace(/^\t+/gm, (str: string) => ' '.repeat(spaceCount * str.length))
 }
