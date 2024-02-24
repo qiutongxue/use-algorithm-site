@@ -1,10 +1,12 @@
+// Register directive nodes in mdast:
+/// <reference types="mdast-util-directive" />
+
 import { visit } from 'unist-util-visit'
 import { h } from 'hastscript'
-import type { Root } from 'remark-directive'
+import type { Root } from 'mdast'
 import { toHast } from 'mdast-util-to-hast'
 
 // const containerTypes = ["info", "warning", "danger", "tip", "details"];
-
 /**
  *  使用方式： https://github.com/syntax-tree/mdast-util-directive#syntax-tree
  *  1. type === 'textDirective':
@@ -19,12 +21,10 @@ import { toHast } from 'mdast-util-to-hast'
 export default function remarkContainerPlugin() {
   return (tree: Root) => {
     visit(tree, 'containerDirective', (node) => {
-      if (node.type === 'containerDirective') {
-        if (node.name === 'note')
-          return handleNoteContainer(node)
-        if (node.name === 'leetcode')
-          return handleLeetcodeContainer(node)
-      }
+      if (node.name === 'note')
+        return handleNoteContainer(node)
+      if (node.name === 'leetcode')
+        return handleLeetcodeContainer(node)
     })
   }
 }
