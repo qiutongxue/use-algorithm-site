@@ -4,6 +4,7 @@ const mapper = {
   rs: 'Rust',
   py: 'Python',
   cpp: 'C++',
+  cs: 'C#',
 }
 
 export function langMapper(lang: string) {

@@ -7,11 +7,7 @@ interface CodeProps {
   keywords: string
 }
 
-const priority = ['ts', 'js', 'rs', 'java', 'py', 'go', 'cpp', 'c#', 'c']
-
-const langMapper = {
-  cs: 'c#',
-}
+const priority = ['ts', 'js', 'rs', 'java', 'py', 'go', 'cpp', 'cs', 'c'] as const
 
 let cache: Record<string, CodeProps> | null = null
 
@@ -42,7 +38,7 @@ async function fetch() {
 
   for (const [path, promise] of Object.entries<() => Promise<string>>(globs)) {
     const ext = extname(path).slice(1)
-    const lang = langMapper[ext] || ext
+    const lang = ext
     const post = dirname(path).split('/').at(-1)
     if (!post || post === 'code')
       continue

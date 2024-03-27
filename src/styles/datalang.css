@@ -27,6 +27,6 @@
 [data-lang='cpp'] {
     background-image: var(--icon-cpp);
 }
-[data-lang='c#'] {
+[data-lang='cs'] {
     background-image: var(--icon-cs);
 }
