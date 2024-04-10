@@ -3,9 +3,9 @@
     "compilerOptions": {
         "baseUrl": ".",
         "paths": {
-            "@/*": ["src/*"]
+            "@/*": [
+                "src/*"
+            ],
         },
     },
-    "include": ["plugins/*.ts", "plugins/remark-container-plugin.ts"],
-
 }
