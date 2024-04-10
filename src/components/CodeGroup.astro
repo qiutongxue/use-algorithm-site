@@ -22,36 +22,22 @@ const { groups } = Astro.props
     })
 </script>
 
-<div class='code-group'>
-    <div class='code-group-labels'>
+<div class="code-group">
+    <div class="code-group-labels">
         {
             groups.map(({ lang }, idx) => (
-                <div
-                    class:list={[
-                        'code-group-label',
-                        idx === 0 ? 'checked' : '',
-                    ]}
-                    data-lang={lang}
-                >
-                    <label for={`code-group-${lang}`}>
-                        {langMapper(lang as string)}
-                    </label>
+                <div class:list={['code-group-label', idx === 0 ? 'checked' : '']} data-lang={lang}>
+                    <label for={`code-group-${lang}`}>{langMapper(lang as string)}</label>
                 </div>
             ))
         }
     </div>
 
-    <div class='code-group-container'>
+    <div class="code-group-container">
         {
             groups.map(({ code, lang }, idx) => (
                 <>
-                    <input
-                        type='radio'
-                        class='code-group-input'
-                        name='code-group'
-                        id={`code-group-${lang}`}
-                        checked={idx === 0}
-                    />
+                    <input type="radio" class="code-group-input" name="code-group" id={`code-group-${lang}`} checked={idx === 0} />
                     <CodeBlock code={code} lang={lang} />
                 </>
             ))
@@ -59,7 +45,7 @@ const { groups } = Astro.props
     </div>
 </div>
 
-<style lang='scss' is:global>
+<style lang="scss" is:global>
     @import url(../styles/iconVars);
     @import url(../styles/datalang);
 

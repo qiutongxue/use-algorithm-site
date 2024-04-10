@@ -18,9 +18,8 @@ const { code, lang } = Astro.props
     copyButtons.forEach((button) => {
         button.addEventListener('click', () => {
             if (button.classList.contains('copied')) return
-            const code =
-                button.parentElement.querySelector('pre code').textContent
-            navigator.clipboard.writeText(code).then(() => {
+            const code = button.parentElement?.querySelector('pre code')?.textContent
+            navigator.clipboard.writeText(code ?? '').then(() => {
                 button.classList.add('copied')
                 setTimeout(() => {
                     button.classList.remove('copied')
@@ -30,9 +29,9 @@ const { code, lang } = Astro.props
     })
 </script>
 
-<div class='code-block'>
-    <button class='copy'></button>
-    <span class='lang'>{lang}</span>
+<div class="code-block">
+    <button class="copy"></button>
+    <span class="lang">{lang}</span>
     <Code code={code} lang={lang} />
 </div>
 
@@ -135,7 +134,9 @@ const { code, lang } = Astro.props
         font-size: 12px;
         font-weight: 500;
         color: rgba(235, 235, 235, 0.38);
-        transition: color 0.4s, opacity 0.4s;
+        transition:
+            color 0.4s,
+            opacity 0.4s;
     }
 
     .code-block:hover .lang {
