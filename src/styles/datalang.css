@@ -3,30 +3,39 @@
 [data-lang] {
     background-image: var(--icon-file);
 }
+
 [data-lang='js'] {
     background-image: var(--icon-javascript);
 }
+
 [data-lang='ts'] {
     background-image: var(--icon-typescript);
 }
+
 [data-lang='java'] {
     background-image: var(--icon-java);
 }
+
 [data-lang='py'] {
     background-image: var(--icon-python);
 }
+
 [data-lang='rs'] {
     background-image: var(--icon-rust);
 }
+
 [data-lang='go'] {
     background-image: var(--icon-go);
 }
+
 [data-lang='c'] {
     background-image: var(--icon-c);
 }
+
 [data-lang='cpp'] {
     background-image: var(--icon-cpp);
 }
+
 [data-lang='cs'] {
     background-image: var(--icon-cs);
 }
