@@ -1,12 +1,12 @@
 ---
 // TODO: 尝试代码块的暗色模式
 
-import { Code } from 'astro/components'
-import type { Props as CodeProps } from 'astro/components/Code.astro'
+import { Code } from 'astro:components'
+import type { BundledLanguage } from 'shiki'
 
 export interface Props {
     code: string
-    lang: CodeProps['lang']
+    lang: BundledLanguage
 }
 
 const { code, lang } = Astro.props
