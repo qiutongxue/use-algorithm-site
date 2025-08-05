@@ -1,12 +1,61 @@
+use std::ops::Deref;
+
+#[derive(Clone, Copy)]
+struct NodeCtx {
+    index: usize,
+    start: usize,
+    end: usize,
+}
+
+impl From<(usize, usize, usize)> for NodeCtx {
+    fn from((index, start, end): (usize, usize, usize)) -> Self {
+        Self { index, start, end }
+    }
+}
+
+impl Deref for NodeCtx {
+    type Target = usize;
+
+    fn deref(&self) -> &usize {
+        &self.index
+    }
+}
+
+impl NodeCtx {
+    fn split(&self) -> (NodeCtx, NodeCtx) {
+        let mid = (self.start + self.end) >> 1;
+        (
+            (self.index * 2 + 1, self.start, mid).into(),
+            (self.index * 2 + 2, mid + 1, self.end).into(),
+        )
+    }
+
+    fn is_leaf(&self) -> bool {
+        self.start == self.end
+    }
+
+    fn contains(&self, index: usize) -> bool {
+        self.start <= index && index <= self.end
+    }
+
+    fn is_contained_in_range(&self, start: usize, end: usize) -> bool {
+        start <= self.start && self.end <= end
+    }
+
+    fn overlaps(&self, start: usize, end: usize) -> bool {
+        !(self.end < start || self.start > end)
+    }
+}
+
 pub struct SegmentTree<T, F>
 where
-    T: Clone + Copy,
+    T: Copy,
     F: Fn(T, T) -> T,
 {
     tree: Vec<T>,
-    array: Vec<T>,
     operate: F,
     fallback: T,
+    size: usize,
 }
 
 impl<T, F> SegmentTree<T, F>
@@ -14,106 +63,88 @@ where
     T: Clone + Copy,
     F: Fn(T, T) -> T,
 {
-    pub fn new(input_array: &Vec<T>, operation: F, operation_fallback: T) -> Self {
+    pub fn new(input_array: &[T], operation: F, operation_fallback: T) -> Self {
         let operate = operation;
         let fallback = operation_fallback;
-        let array: Vec<T> = input_array.iter().map(|&x| x).collect();
-        let n = array.len();
+        let n = input_array.len();
 
-        let tree_length = match n.is_power_of_two() {
-            true => 2 * n - 1,
-            _ => {
-                let mut len = 0;
-                let mut m = n;
-                while m > 0 {
-                    len += 1;
-                    m >>= 1;
-                }
-                let length = 2 * ((n >> (len - 1)) << len) - 1;
-                length
-            }
-        };
+        let m = n.next_power_of_two();
+        let tree_length = 2 * m - 1;
 
         let tree = vec![fallback; tree_length];
 
         let mut result = Self {
             tree,
-            array,
             operate,
             fallback,
+            size: n,
         };
-        result.build_tree(0, 0, n - 1);
+        result.build_tree((0, 0, n - 1).into(), input_array);
 
         result
     }
 
-    fn build_tree(&mut self, node: usize, start: usize, end: usize) {
-        if start == end {
-            self.tree[node] = self.array[start];
+    fn build_tree(&mut self, node: NodeCtx, array: &[T]) {
+        if node.is_leaf() {
+            self.tree[*node] = array[node.start];
             return;
         }
 
-        let (mid, left_node, right_node) = Self::get_info(node, start, end);
+        let (left_node, right_node) = node.split();
 
-        self.build_tree(left_node, start, mid);
-        self.build_tree(right_node, mid + 1, end);
-        self.tree[node] = (self.operate)(self.tree[left_node], self.tree[right_node]);
+        self.build_tree(left_node, array);
+        self.build_tree(right_node, array);
+        self.tree[*node] = (self.operate)(self.tree[*left_node], self.tree[*right_node]);
     }
 
-    fn update_tree(&mut self, node: usize, start: usize, end: usize, index: usize, value: T) {
-        if start == end && index == start {
-            self.tree[node] = value;
+    fn update_tree(&mut self, node: NodeCtx, index: usize, value: T) {
+        if node.is_leaf() {
+            self.tree[*node] = value;
             return;
         }
-        let (mid, left_node, right_node) = Self::get_info(node, start, end);
 
-        if index <= mid {
-            self.update_tree(left_node, start, mid, index, value);
-        } else {
-            self.update_tree(right_node, mid + 1, end, index, value);
+        let (left_node, right_node) = node.split();
+
+        if left_node.contains(index) {
+            self.update_tree(left_node, index, value);
+        } else if right_node.contains(index) {
+            self.update_tree(right_node, index, value);
         }
 
-        self.tree[node] = (self.operate)(self.tree[left_node], self.tree[right_node]);
+        self.tree[*node] = (self.operate)(self.tree[*left_node], self.tree[*right_node]);
     }
 
-    fn query_tree(&self, node: usize, start: usize, end: usize, left: usize, right: usize) -> T {
-        if right < start || left > end {
+    fn query_tree(&self, node: NodeCtx, left: usize, right: usize) -> T {
+        if !node.overlaps(left, right) {
             return self.fallback;
         }
-        if left <= start && end <= right {
-            return self.tree[node];
+        if node.is_contained_in_range(left, right) {
+            return self.tree[*node];
         }
 
-        let (mid, left_node, right_node) = Self::get_info(node, start, end);
+        let (left_node, right_node) = node.split();
 
-        let left_result = self.query_tree(left_node, start, mid, left, right);
-        let right_result = self.query_tree(right_node, mid + 1, end, left, right);
+        let left_result = self.query_tree(left_node, left, right);
+        let right_result = self.query_tree(right_node, left, right);
 
         (self.operate)(left_result, right_result)
     }
 
     pub fn query(&self, left: usize, right: usize) -> T {
-        let n = self.array.len();
-        if left > right || right >= self.array.len() {
+        let n = self.size;
+        if left > right || right >= n {
             panic!("超出范围");
         }
 
-        self.query_tree(0, 0, n - 1, left, right)
+        self.query_tree((0, 0, n - 1).into(), left, right)
     }
 
     pub fn update(&mut self, index: usize, value: T) {
-        let n = self.array.len();
+        let n = self.size;
         if index >= n {
             panic!("超出范围");
         }
 
-        self.update_tree(0, 0, n - 1, index, value)
-    }
-
-    fn get_info(node: usize, start: usize, end: usize) -> (usize, usize, usize) {
-        let mid = (start + end) >> 1;
-        let left_node = node * 2 + 1;
-        let right_node = node * 2 + 2;
-        (mid, left_node, right_node)
+        self.update_tree((0, 0, n - 1).into(), index, value)
     }
 }
