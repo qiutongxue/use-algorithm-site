@@ -1,7 +1,7 @@
 ---
 import ToolCodeLayout from '@/layouts/ToolCodeLayout/index.astro'
 import { fetchCodes } from '@/utils/fetchCodes'
-import path from 'path'
+import path from 'node:path'
 
 export async function getStaticPaths() {
     const info = await fetchCodes()
@@ -12,7 +12,7 @@ export async function getStaticPaths() {
             // 不在 pages 文件夹下，所以 url 为空，只能用 file
             const { file } = post
             // **/[page]/[filename].[extname]
-            const algoName = path.parse(file).name.replace(/[\-\_\s]/g, '')
+            const algoName = path.parse(file).name
             return [algoName, post]
         })
     )
@@ -25,7 +25,6 @@ export async function getStaticPaths() {
                 post,
                 frontmatter: {
                     ...post.frontmatter,
-                    title: info[page]?.chName || info[page]?.enName,
                     url: page,
                 },
             },

@@ -1,10 +1,12 @@
 ---
-import { fetchCodes } from "@/utils/fetchCodes";
 import BaseLayout from "@/layouts/BaseLayout/index.astro";
-import path from "path";
+import { fetchCodes } from "@/utils/fetchCodes";
+import path from "node:path";
 
 const info = await fetchCodes();
 const posts = await Astro.glob("/src/code/*.md");
+const algos: typeof info = {}
+
 for (const post of posts) {
   const { file } = post;
   // 读取文件
@@ -37,6 +39,7 @@ for (const post of posts) {
       .toLowerCase()
   );
   algoProps.keywords = [...new Set(keywords)];
+  algos[fileName] = algoProps
 }
 ---
 
@@ -102,7 +105,7 @@ for (const post of posts) {
     </div>
     <div class="wrapper">
       {
-        Object.entries(info)
+        Object.entries(algos)
           .sort()
           .map(([post, { chName, enName, keywords, codes }]) => (
             <a
