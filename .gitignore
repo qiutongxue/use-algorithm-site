@@ -2,3 +2,6 @@ node_modules
 dist
 .tokeiignore
 pnpm-lock.yaml
+bun.lock
+**/rust/target
+**/rust/Cargo.lock

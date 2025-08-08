@@ -1,18 +1,19 @@
 ---
 import ToolCodeLayout from '@/layouts/ToolCodeLayout/index.astro'
 import { fetchCodes } from '@/utils/fetchCodes'
+import path from 'path'
 
 export async function getStaticPaths() {
     const info = await fetchCodes()
     // 提取出带有 markdown 的算法
-    const posts = await Astro.glob('/src/code/**/*.md')
+    const posts = await Astro.glob('/src/code/*.md')
     const postMap = new Map(
         posts.map((post) => {
             // 不在 pages 文件夹下，所以 url 为空，只能用 file
             const { file } = post
             // **/[page]/[filename].[extname]
-            const page = file.split('/').at(-2)
-            return [page, post]
+            const algoName = path.parse(file).name.replace(/[\-\_\s]/g, '')
+            return [algoName, post]
         })
     )
 

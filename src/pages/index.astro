@@ -1,247 +1,277 @@
 ---
-import { fetchCodes } from '@/utils/fetchCodes'
-import BaseLayout from '@/layouts/BaseLayout/index.astro'
-const info = await fetchCodes()
+import { fetchCodes } from "@/utils/fetchCodes";
+import BaseLayout from "@/layouts/BaseLayout/index.astro";
+import path from "path";
+
+const info = await fetchCodes();
+const posts = await Astro.glob("/src/code/*.md");
+for (const post of posts) {
+  const { file } = post;
+  // 读取文件
+  const fileName = path.parse(file).name;
+  const algoProps = info[fileName];
+  if (!algoProps) {
+    console.warn("Do not have any codes for algorithm", fileName);
+    continue;
+  }
+  algoProps.chName = post.frontmatter.title;
+  algoProps.enName =
+    post.frontmatter.subtitle ||
+    fileName
+      .split("_")
+      .map((word) => word.at(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  const keywords: string[] = (post.frontmatter.keywords || []).map((word) =>
+    word.toLowerCase()
+  );
+  // 中文关键字
+  keywords.push(algoProps.chName);
+  // 英文关键字
+  keywords.push(algoProps.enName.toLowerCase());
+  // 首字母缩写
+  keywords.push(
+    fileName
+      .split("_")
+      .map((w) => w.at(0))
+      .join("")
+      .toLowerCase()
+  );
+  algoProps.keywords = [...new Set(keywords)];
+}
 ---
 
 <script>
-    function debounce(func: Function, delay: number) {
-        let timer: null | number | NodeJS.Timeout = null
-        return function (...args) {
-            if (timer) clearTimeout(timer)
+  function debounce(func: Function, delay: number) {
+    let timer: null | number | NodeJS.Timeout = null;
+    return function (...args) {
+      if (timer) clearTimeout(timer);
 
-            timer = setTimeout(() => {
-                func.apply(this, args)
-            }, delay)
+      timer = setTimeout(() => {
+        func.apply(this, args);
+      }, delay);
+    };
+  }
+  const search = document.querySelector("#search");
+
+  const posts = document.querySelectorAll(".wrapper .post");
+  search.addEventListener(
+    "input",
+    debounce((e: Event) => {
+      const target = (e.target as HTMLInputElement).value.toLowerCase();
+      if (target === "") {
+        posts.forEach((post) => post.classList.remove("hidden"));
+        return;
+      }
+      if (target.startsWith(":")) {
+        const targetLang = target.slice(1);
+        posts.forEach((post) => {
+          const langs = post.querySelectorAll("[data-lang]");
+          if (
+            [...langs].some((lang) =>
+              (lang as HTMLElement).dataset.lang.includes(targetLang)
+            )
+          ) {
+            post.classList.remove("hidden");
+          } else {
+            post.classList.add("hidden");
+          }
+        });
+        return;
+      }
+      posts.forEach((post) => {
+        const source = (post as HTMLElement).dataset.search.toLowerCase();
+        if (source.includes(target)) {
+          post.classList.remove("hidden");
+        } else {
+          post.classList.add("hidden");
         }
-    }
-    const search = document.querySelector('#search')
-
-    const posts = document.querySelectorAll('.wrapper .post')
-    search.addEventListener(
-        'input',
-        debounce((e: Event) => {
-            const target = (e.target as HTMLInputElement).value.toLowerCase()
-            if (target === '') {
-                posts.forEach((post) => post.classList.remove('hidden'))
-                return
-            }
-            if (target.startsWith(':')) {
-                const targetLang = target.slice(1)
-                posts.forEach((post) => {
-                    const langs = post.querySelectorAll('[data-lang]')
-                    if (
-                        [...langs].some((lang) =>
-                            (lang as HTMLElement).dataset.lang.includes(
-                                targetLang
-                            )
-                        )
-                    ) {
-                        post.classList.remove('hidden')
-                    } else {
-                        post.classList.add('hidden')
-                    }
-                })
-                return
-            }
-            posts.forEach((post) => {
-                const source = (
-                    post as HTMLElement
-                ).dataset.search.toLowerCase()
-                if (source.includes(target)) {
-                    post.classList.remove('hidden')
-                } else {
-                    post.classList.add('hidden')
-                }
-            })
-        }, 200)
-    )
+      });
+    }, 200)
+  );
 </script>
 
 <BaseLayout>
-    <div class='root'>
-        <div class='main-icon'></div>
-        <div class='search'>
-            <input type='text' id='search' name='search-code' />
-            <div class='search-tips'>
-                * 可以输入 <kbd>:[文件名后缀]</kbd> 筛选语言，如 <kbd>:py</kbd>
-                <kbd>:js</kbd> 等
-            </div>
-        </div>
-        <div class='wrapper'>
-            {
-                Object.entries(info)
-                    .sort()
-                    .map(([post, { chName, enName, keywords, codes }]) => (
-                        <a
-                            class='post'
-                            href={`tool-codes/${post}`}
-                            data-search={keywords || ''}
-                        >
-                            <span class='title-main'>
-                                {chName || enName || post}
-                            </span>
-                            <span class='title-sub'>{enName}</span>
-                            <div class='icon-wrapper'>
-                                {codes &&
-                                    codes.map(({ lang }) => (
-                                        <div class='icon' data-lang={lang} />
-                                    ))}
-                            </div>
-                        </a>
-                    ))
-            }
-        </div>
+  <div class="root">
+    <div class="main-icon"></div>
+    <div class="search">
+      <input type="text" id="search" name="search-code" />
+      <div class="search-tips">
+        * 可以输入 <kbd>:[文件名后缀]</kbd> 筛选语言，如 <kbd>:py</kbd>
+        <kbd>:js</kbd> 等
+      </div>
     </div>
+    <div class="wrapper">
+      {
+        Object.entries(info)
+          .sort()
+          .map(([post, { chName, enName, keywords, codes }]) => (
+            <a
+              class="post"
+              href={`tool-codes/${post}`}
+              data-search={keywords || ""}
+            >
+              <span class="title-main">{chName || enName || post}</span>
+              <span class="title-sub">{enName}</span>
+              <div class="icon-wrapper">
+                {codes &&
+                  codes.map(({ lang }) => (
+                    <div class="icon" data-lang={lang} />
+                  ))}
+              </div>
+            </a>
+          ))
+      }
+    </div>
+  </div>
 </BaseLayout>
 
-<style lang='scss'>
-    @import url(../styles/iconVars);
-    @import url(../styles/datalang);
-    * {
-        box-sizing: border-box;
+<style lang="scss">
+  @import url(../styles/iconVars);
+  @import url(../styles/datalang);
+  * {
+    box-sizing: border-box;
+  }
+
+  .root {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    // height: 100vh;
+    margin: 0;
+  }
+
+  kbd {
+    background-color: #fff;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    margin: auto 1px;
+    padding: 2px;
+  }
+
+  .main-icon {
+    background-image: url("/ua.svg");
+    background-repeat: no-repeat;
+    background-size: 32rem;
+    margin-top: 10rem;
+    background-position: 50% 50%;
+    height: 100px;
+    width: 100%;
+  }
+
+  .search {
+    margin: 2rem auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    input {
+      outline: none;
+      border: 1px solid #aaa;
+      height: 3rem;
+      width: 100%;
+      border-radius: 1.8rem;
+      font-size: 1.5rem;
+      padding: 0.5rem 2rem 0.5rem 1rem;
+      opacity: 0.5;
+
+      background-image: var(--icon-search);
+      background-repeat: no-repeat;
+      background-position: 98% 50%;
+      background-size: 1.5rem;
+
+      transition: 0.5s ease;
+
+      &:hover,
+      &:focus {
+        opacity: 1;
+      }
     }
 
-    .root {
+    .search-tips {
+      margin-top: 1rem;
+      opacity: 0.6;
+      font-size: 0.8rem;
+    }
+  }
+
+  .wrapper {
+    display: flex;
+    padding: 0 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    // max-width: 960px;
+    margin: auto;
+
+    a.post {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 2rem 1rem;
+      padding: 1.5rem 1rem 0.5rem 1rem;
+      text-decoration: none;
+      border-radius: 10px;
+      min-width: 100px;
+
+      box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+
+      transition: 0.5s ease;
+
+      &.hidden {
+        display: none;
+      }
+
+      &:hover {
+        background-color: #fafafa;
+      }
+
+      .title-main {
+        color: rgba(100, 100, 100, 0.7);
+        font-size: 24px;
+        font-weight: bold;
+      }
+
+      .title-sub {
+        color: rgba(100, 100, 100, 0.6);
+        margin-top: 5px;
+      }
+
+      .icon-wrapper {
         display: flex;
-        flex-direction: column;
         justify-content: center;
         align-items: center;
-        // height: 100vh;
-        margin: 0;
+        margin-top: 20px;
+      }
+      .icon {
+        background-repeat: no-repeat;
+        background-size: 20px;
+        background-position: 50% 50%;
+        display: inline-block;
+        width: 30px;
+        height: 30px;
+      }
     }
+  }
 
-    kbd {
-        background-color: #fff;
-        border: 1px solid #aaa;
-        border-radius: 5px;
-        margin: auto 1px;
-        padding: 2px;
-    }
+  .icon.github {
+    width: 25px;
+    height: 25px;
+    background-image: var(--icon-github);
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: 25px;
 
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+  }
+
+  @media screen and (max-width: 600px) {
     .main-icon {
-        background-image: url('/ua.svg');
-        background-repeat: no-repeat;
-        background-size: 32rem;
-        margin-top: 10rem;
-        background-position: 50% 50%;
-        height: 100px;
-        width: 100%;
+      background-size: 80%;
     }
-
-    .search {
-        margin: 2rem auto;
-        text-align: center;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-
-        input {
-            outline: none;
-            border: 1px solid #aaa;
-            height: 3rem;
-            width: 100%;
-            border-radius: 1.8rem;
-            font-size: 1.5rem;
-            padding: 0.5rem 2rem 0.5rem 1rem;
-            opacity: 0.5;
-
-            background-image: var(--icon-search);
-            background-repeat: no-repeat;
-            background-position: 98% 50%;
-            background-size: 1.5rem;
-
-            transition: 0.5s ease;
-
-            &:hover,
-            &:focus {
-                opacity: 1;
-            }
-        }
-
-        .search-tips {
-            margin-top: 1rem;
-            opacity: 0.6;
-            font-size: 0.8rem;
-        }
-    }
-
-    .wrapper {
-        display: flex;
-        padding: 0 1rem;
-        flex-wrap: wrap;
-        justify-content: center;
-        align-items: center;
-        // max-width: 960px;
-        margin: auto;
-
-        a.post {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            margin: 2rem 1rem;
-            padding: 1.5rem 1rem 0.5rem 1rem;
-            text-decoration: none;
-            border-radius: 10px;
-            min-width: 100px;
-
-            box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
-
-            transition: 0.5s ease;
-
-            &.hidden {
-                display: none;
-            }
-
-            &:hover {
-                background-color: #fafafa;
-            }
-
-            .title-main {
-                color: rgba(100, 100, 100, 0.7);
-                font-size: 24px;
-                font-weight: bold;
-            }
-
-            .title-sub {
-                color: rgba(100, 100, 100, 0.6);
-                margin-top: 5px;
-            }
-
-            .icon-wrapper {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                margin-top: 20px;
-            }
-            .icon {
-                background-repeat: no-repeat;
-                background-size: 20px;
-                background-position: 50% 50%;
-                display: inline-block;
-                width: 30px;
-                height: 30px;
-            }
-        }
-    }
-
-    .icon.github {
-        width: 25px;
-        height: 25px;
-        background-image: var(--icon-github);
-        background-repeat: no-repeat;
-        background-position: 50% 50%;
-        background-size: 25px;
-
-        position: absolute;
-        right: 1rem;
-        top: 1rem;
-    }
-
-    @media screen and (max-width: 600px) {
-        .main-icon {
-            background-size: 80%;
-        }
-    }
+  }
 </style>
