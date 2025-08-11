@@ -1,0 +1,136 @@
+---
+// src/components/Search.astro
+---
+<div class="search-container">
+    <div class="search-wrapper">
+      <input type="text" id="search" name="search-code" placeholder="搜索算法... (例如: 数组, binary search)" />
+      <div class="search-icon-wrapper">
+        <div class="search-icon"></div>
+      </div>
+    </div>
+    <div class="search-tips">
+      小技巧: 输入 <kbd>:py</kbd> 或 <kbd>:js</kbd> 按语言筛选
+    </div>
+  </div>
+  
+  <script>
+    // Script 部分无需修改，逻辑是健全的
+    function debounce(func, delay) {
+      let timer = null;
+      return function (...args) {
+        if (timer) clearTimeout(timer);
+        timer = window.setTimeout(() => {
+          func.apply(this, args);
+        }, delay);
+      };
+    }
+  
+    const searchInput = document.querySelector("#search");
+    const cards = document.querySelectorAll<HTMLDivElement>(".card-grid-wrapper > a.card");
+  
+    searchInput.addEventListener(
+      "input",
+      debounce((e) => {
+        const query = e.target.value.toLowerCase().trim();
+  
+        cards.forEach(card => {
+          const isHidden = card.classList.contains('hidden');
+          let shouldBeVisible = false;
+  
+          if (query.startsWith(":")) {
+            const targetLang = query.slice(1);
+            const langElements = card.querySelectorAll<HTMLDivElement>("[data-lang]");
+            shouldBeVisible = [...langElements].some(lang =>
+              lang.dataset.lang?.includes(targetLang)
+            );
+          } else {
+            const searchData = card.dataset.search || "";
+            shouldBeVisible = searchData.toLowerCase().includes(query);
+          }
+  
+          if (shouldBeVisible && isHidden) {
+            card.classList.remove("hidden");
+          } else if (!shouldBeVisible && !isHidden) {
+            card.classList.add("hidden");
+          }
+        });
+      }, 200)
+    );
+  </script>
+  
+  <style lang="scss">
+    .search-container {
+      width: 100%;
+      max-width: 640px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .search-wrapper {
+      position: relative;
+      width: 100%;
+    }
+  
+    #search {
+      width: 100%;
+      height: 3.25rem;
+      padding: 0 3.5rem 0 1.5rem;
+      font-size: 1rem;
+      border-radius: 0.75rem;
+      border: 1px solid var(--border-color);
+      background-color: var(--card-bg);
+      color: var(--text-color);
+      outline: none;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      -webkit-appearance: none; // 修正 iOS 上的样式
+  
+      &::placeholder {
+        color: var(--subtle-text-color);
+        opacity: 0.8;
+      }
+  
+      &:focus {
+        border-color: var(--accent-color-dark);
+        box-shadow: 0 0 0 3px rgba(158, 209, 255, 0.4);
+      }
+    }
+  
+    .search-icon-wrapper {
+      position: absolute;
+      right: 0;
+      top: 0;
+      height: 100%;
+      width: 3.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+    }
+  
+    .search-icon {
+      width: 1.25rem;
+      height: 1.25rem;
+      background-image: var(--icon-search); // 确保你的 iconVars 中有这个变量
+      background-repeat: no-repeat;
+      background-size: contain;
+      opacity: 0.5;
+    }
+  
+    .search-tips {
+      margin-top: 0.75rem;
+      font-size: 0.8rem;
+      color: var(--subtle-text-color);
+  
+      kbd {
+        background-color: #e9ecef;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        margin: 0 2px;
+        padding: 2px 5px;
+        font-size: 0.75rem;
+        font-family: "SF Mono", "Menlo", "Monaco", Consolas, "Liberation Mono", "Courier New", monospace;
+      }
+    }
+  </style>

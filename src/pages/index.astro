@@ -1,280 +1,142 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout/index.astro";
+import Search from "@/components/Search.astro";
+import Card from "@/components/Card.astro";
 import { fetchCodes } from "@/utils/fetchCodes";
 import path from "node:path";
 
+// 数据处理逻辑保持不变，它已经很高效了
 const info = await fetchCodes();
 const posts = await Astro.glob("/src/code/*.md");
-const algos: typeof info = {}
 
-for (const post of posts) {
-  const { file } = post;
-  // 读取文件
-  const fileName = path.parse(file).name;
+const algos = posts.map(post => {
+  const fileName = path.parse(post.file).name;
   const algoProps = info[fileName];
+
   if (!algoProps) {
     console.warn("Do not have any codes for algorithm", fileName);
-    continue;
+    return null;
   }
-  algoProps.chName = post.frontmatter.title;
-  algoProps.enName =
-    post.frontmatter.subtitle ||
-    fileName
-      .split("_")
-      .map((word) => word.at(0).toUpperCase() + word.slice(1))
-      .join(" ");
-  const keywords: string[] = (post.frontmatter.keywords || []).map((word) =>
-    word.toLowerCase()
-  );
-  // 中文关键字
-  keywords.push(algoProps.chName);
-  // 英文关键字
-  keywords.push(algoProps.enName.toLowerCase());
-  // 首字母缩写
-  keywords.push(
-    fileName
-      .split("_")
-      .map((w) => w.at(0))
-      .join("")
-      .toLowerCase()
-  );
-  algoProps.keywords = [...new Set(keywords)];
-  algos[fileName] = algoProps
-}
+
+  const enName = post.frontmatter.subtitle || fileName
+    .split("_")
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+
+  const keywords = [
+    ...(post.frontmatter.keywords || []).map(word => word.toLowerCase()),
+    algoProps.chName,
+    enName.toLowerCase(),
+    fileName.split("_").map(w => w.charAt(0)).join("").toLowerCase()
+  ];
+
+  return {
+    href: `/tool-codes/${fileName}`,
+    chName: post.frontmatter.title,
+    enName: enName,
+    keywords: [...new Set(keywords)],
+    codes: algoProps.codes,
+    description: post.frontmatter.description,
+    tags: post.frontmatter.tags,
+  };
+}).filter(Boolean);
 ---
 
-<script>
-  function debounce(func: Function, delay: number) {
-    let timer: null | number | NodeJS.Timeout = null;
-    return function (...args) {
-      if (timer) clearTimeout(timer);
-
-      timer = setTimeout(() => {
-        func.apply(this, args);
-      }, delay);
-    };
-  }
-  const search = document.querySelector("#search");
-
-  const posts = document.querySelectorAll(".wrapper .post");
-  search.addEventListener(
-    "input",
-    debounce((e: Event) => {
-      const target = (e.target as HTMLInputElement).value.toLowerCase();
-      if (target === "") {
-        posts.forEach((post) => post.classList.remove("hidden"));
-        return;
-      }
-      if (target.startsWith(":")) {
-        const targetLang = target.slice(1);
-        posts.forEach((post) => {
-          const langs = post.querySelectorAll("[data-lang]");
-          if (
-            [...langs].some((lang) =>
-              (lang as HTMLElement).dataset.lang.includes(targetLang)
-            )
-          ) {
-            post.classList.remove("hidden");
-          } else {
-            post.classList.add("hidden");
-          }
-        });
-        return;
-      }
-      posts.forEach((post) => {
-        const source = (post as HTMLElement).dataset.search.toLowerCase();
-        if (source.includes(target)) {
-          post.classList.remove("hidden");
-        } else {
-          post.classList.add("hidden");
-        }
-      });
-    }, 200)
-  );
-</script>
-
 <BaseLayout>
-  <div class="root">
-    <div class="main-icon"></div>
-    <div class="search">
-      <input type="text" id="search" name="search-code" />
-      <div class="search-tips">
-        * 可以输入 <kbd>:[文件名后缀]</kbd> 筛选语言，如 <kbd>:py</kbd>
-        <kbd>:js</kbd> 等
-      </div>
-    </div>
-    <div class="wrapper">
-      {
-        Object.entries(algos)
-          .sort()
-          .map(([post, { chName, enName, keywords, codes }]) => (
-            <a
-              class="post"
-              href={`tool-codes/${post}`}
-              data-search={keywords || ""}
-            >
-              <span class="title-main">{chName || enName || post}</span>
-              <span class="title-sub">{enName}</span>
-              <div class="icon-wrapper">
-                {codes &&
-                  codes.map(({ lang }) => (
-                    <div class="icon" data-lang={lang} />
-                  ))}
-              </div>
-            </a>
+  <div class="page-container">
+    <header class="page-header">
+      <!-- 直接将你的 SVG 代码内联进来，这样可以轻松用 CSS 控制它 -->
+      <svg width="331" height="42" viewBox="0 0 331 42" fill="none" xmlns="http://www.w3.org/2000/svg" class="main-logo">
+        <path d="M0.970156 22.16V19.04L17.7702 11L18.9702 13.52L3.85016 20.6L18.9702 27.68L17.7702 30.2L0.970156 22.16ZM294.679 35L305.919 4.4L308.679 5.4L297.439 36L294.679 35ZM312.025 27.68L327.145 20.6L312.025 13.52L313.225 11L330.025 19.04V22.16L313.225 30.2L312.025 27.68Z" fill="black" fill-opacity="0.2"/>
+        <path d="M25.5672 26.656V0.879997H29.5992V27.088C29.5992 29.264 30.6872 30.352 32.8632 30.352H43.2312C45.4072 30.352 46.4952 29.264 46.4952 27.088V0.879997H50.5272V26.656C50.5272 31.552 48.0792 34 43.1832 34H32.9112C28.0152 34 25.5672 31.552 25.5672 26.656Z" fill="#9ED1FF"/>
+        <path d="M56.982 32.8V31.2H66.222C68.062 31.2 68.982 30.2667 68.982 28.4C68.982 26.5067 68.2487 25.44 66.782 25.2L62.022 24.4C58.662 23.84 56.982 22.0133 56.982 18.92C56.982 15.1067 58.982 13.2 62.982 13.2H69.662L71.262 14.4V16H62.942C61.0754 16 60.142 16.9333 60.142 18.8C60.142 20.48 60.9287 21.4533 62.502 21.72L67.262 22.52C70.5687 23.0533 72.222 24.96 72.222 28.24C72.222 32.08 70.1954 34 66.142 34H58.582L56.982 32.8ZM77.462 28V19.2C77.462 15.2 79.462 13.2 83.462 13.2H88.662C92.662 13.2 94.662 15.2 94.662 19.2V24.84H80.662V28.4C80.662 30.2667 81.5954 31.2 83.462 31.2H93.862V32.8L92.262 34H83.462C79.462 34 77.462 32 77.462 28ZM80.662 22.24H91.462V18.8C91.462 16.9333 90.5287 16 88.662 16H83.462C81.5954 16 80.662 16.9333 80.662 18.8V22.24ZM140.435 28.32V4.4H143.635V28.64C143.635 30.48 144.568 31.4533 146.435 31.56V34.32C142.435 34.32 140.435 32.32 140.435 28.32ZM150.665 28V19.2C150.665 15.2 152.665 13.2 156.665 13.2H167.865V36C167.865 40 165.865 42 161.865 42H153.865L152.265 40.8V39.2H161.865C163.732 39.2 164.665 38.2667 164.665 36.4V34H156.665C152.665 34 150.665 32 150.665 28ZM153.865 28.4C153.865 30.2667 154.798 31.2 156.665 31.2H164.665V16H156.665C154.798 16 153.865 16.9333 153.865 18.8V28.4ZM173.946 28V19.2C173.946 15.2 175.946 13.2 179.946 13.2H185.546C189.546 13.2 191.546 15.2 191.546 19.2V28C191.546 32 189.546 34 185.546 34H179.946C175.946 34 173.946 32 173.946 28ZM177.146 28.4C177.146 30.2667 178.08 31.2 179.946 31.2H185.546C187.413 31.2 188.346 30.2667 188.346 28.4V18.8C188.346 16.9333 187.413 16 185.546 16H179.946C178.08 16 177.146 16.9333 177.146 18.8V28.4ZM197.466 34V15.6C198.399 14 200.132 13.2 202.666 13.2H206.666L208.266 14.4V16H203.106C201.986 16 201.172 16.3067 200.666 16.92V34H197.466ZM212.349 9.32V5.56H215.869V9.32H212.349ZM212.509 34V13.2H215.709V34H212.509ZM221.958 28V6.4H225.158V13.2H232.758V16H225.158V28.4C225.158 30.2667 226.091 31.2 227.958 31.2H233.158V32.8L231.558 34H227.958C223.958 34 221.958 32 221.958 28ZM237.782 34V4.4H240.982V13.2H248.982C252.982 13.2 254.982 15.2 254.982 19.2V34H251.782V18.8C251.782 16.9333 250.849 16 248.982 16H240.982V34H237.782ZM261.22 34V13.2H284.82C288.82 13.2 290.82 15.2 290.82 19.2V34H287.62V18.8C287.62 16.9333 286.686 16 284.82 16H277.62V34H274.42V16H264.42V34H261.22Z" fill="black"/>
+        <path d="M108.12 33.136L118.968 0.879997H125.592L136.44 33.136L135.864 34H132.552L129.816 25.648H114.744L112.008 34H108.696L108.12 33.136ZM115.944 22H128.616L122.856 4.528H121.704L115.944 22Z" fill="#4FD96E"/>
+      </svg>
+    </header>
+
+    <main class="main-content">
+      <Search />
+      <div class="card-grid-wrapper">
+        {
+          algos.sort((a, b) => a.enName.localeCompare(b.enName)).map(algo => (
+            <Card {...algo} />
           ))
-      }
-    </div>
+        }
+      </div>
+    </main>
   </div>
 </BaseLayout>
 
-<style lang="scss">
-  @import url(../styles/iconVars);
-  @import url(../styles/datalang);
-  * {
+<style lang="scss" is:global>
+  // 定义全局 CSS 变量，方便统一管理
+  :root {
+    --bg-color: #f8f9fa;
+    --card-bg: #ffffff;
+    --text-color: #343a40;
+    --subtle-text-color: #6c757d;
+    --border-color: #dee2e6;
+    --accent-color: #9ED1FF; // 从你的 LOGO 中提取
+    --accent-color-dark: #82b9e5;
+    --green-accent: #4FD96E; // LOGO 中的绿色
+    --shadow-color: rgba(0, 0, 0, 0.05);
+  }
+
+  // 基础样式重置和设置
+  *, *::before, *::after {
     box-sizing: border-box;
   }
 
-  .root {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    // height: 100vh;
+  body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     margin: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
-  kbd {
-    background-color: #fff;
-    border: 1px solid #aaa;
-    border-radius: 5px;
-    margin: auto 1px;
-    padding: 2px;
+  // 页面布局
+  .page-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
   }
 
-  .main-icon {
-    background-image: url("/ua.svg");
-    background-repeat: no-repeat;
-    background-size: 32rem;
-    margin-top: 10rem;
-    background-position: 50% 50%;
-    height: 100px;
-    width: 100%;
-  }
-
-  .search {
-    margin: 2rem auto;
+  .page-header {
+    padding: 4rem 0 3rem;
     text-align: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-
-    input {
-      outline: none;
-      border: 1px solid #aaa;
-      height: 3rem;
-      width: 100%;
-      border-radius: 1.8rem;
-      font-size: 1.5rem;
-      padding: 0.5rem 2rem 0.5rem 1rem;
-      opacity: 0.5;
-
-      background-image: var(--icon-search);
-      background-repeat: no-repeat;
-      background-position: 98% 50%;
-      background-size: 1.5rem;
-
-      transition: 0.5s ease;
-
-      &:hover,
-      &:focus {
-        opacity: 1;
-      }
-    }
-
-    .search-tips {
-      margin-top: 1rem;
-      opacity: 0.6;
-      font-size: 0.8rem;
-    }
   }
 
-  .wrapper {
-    display: flex;
-    padding: 0 1rem;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    // max-width: 960px;
-    margin: auto;
-
-    a.post {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      margin: 2rem 1rem;
-      padding: 1.5rem 1rem 0.5rem 1rem;
-      text-decoration: none;
-      border-radius: 10px;
-      min-width: 100px;
-
-      box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
-
-      transition: 0.5s ease;
-
-      &.hidden {
-        display: none;
-      }
-
-      &:hover {
-        background-color: #fafafa;
-      }
-
-      .title-main {
-        color: rgba(100, 100, 100, 0.7);
-        font-size: 24px;
-        font-weight: bold;
-      }
-
-      .title-sub {
-        color: rgba(100, 100, 100, 0.6);
-        margin-top: 5px;
-      }
-
-      .icon-wrapper {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-top: 20px;
-      }
-      .icon {
-        background-repeat: no-repeat;
-        background-size: 20px;
-        background-position: 50% 50%;
-        display: inline-block;
-        width: 30px;
-        height: 30px;
-      }
-    }
+  .main-logo {
+    width: 100%;
+    max-width: 331px; // 保持 SVG 原始比例
+    height: auto;
   }
 
-  .icon.github {
-    width: 25px;
-    height: 25px;
-    background-image: var(--icon-github);
-    background-repeat: no-repeat;
-    background-position: 50% 50%;
-    background-size: 25px;
-
-    position: absolute;
-    right: 1rem;
-    top: 1rem;
+  .main-content {
+    // 主内容区
   }
+
+  .card-grid-wrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); // 增加卡片最小宽度
+    gap: 2rem; // 增加卡片间距
+    padding: 2rem 0 4rem;
+  }
+  
+  // 引入 data-lang 图标样式
+  @import url(../styles/iconVars);
+  @import url(../styles/datalang);
 
   @media screen and (max-width: 600px) {
-    .main-icon {
-      background-size: 80%;
+    .page-container {
+      padding: 0 1rem;
+    }
+    .page-header {
+      padding: 2.5rem 0 2rem;
+    }
+    .card-grid-wrapper {
+        grid-template-columns: 1fr; // 移动端单列显示
     }
   }
 </style>

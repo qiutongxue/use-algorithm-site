@@ -1,0 +1,202 @@
+---
+// src/components/Card.astro (最终 “展览卡片” 方案)
+interface Props {
+  href: string;
+  keywords: string[];
+  chName: string;
+  enName: string;
+  codes: { lang: string }[];
+  description?: string;
+  tags?: string[];
+}
+
+const { href, keywords, chName, enName, codes, description, tags } = Astro.props;
+---
+
+<a class="card" href={href} data-search={keywords.join(" ")}>
+  <!-- 卡片的主体，负责推开页脚 -->
+  <div class="card-body">
+    <header class="card-header">
+      <h3 class="title-main">{chName || enName}</h3>
+      <p class="title-sub">{enName}</p>
+    </header>
+    
+    <!-- 描述区，它会自动伸缩以保证所有卡片等高 -->
+    {description && <p class="description">{description}</p>}
+  </div>
+
+  <!-- 卡片的页脚，包含了所有元数据 -->
+  <footer class="card-footer">
+    <!-- 标签区：一个可以横向滚动的独立容器 -->
+    {tags && tags.length > 0 && (
+      <div class="tags-container">
+        <div class="tags-scroller">
+          {tags.map(tag => (
+            <span class="tag">{tag}</span>
+          ))}
+        </div>
+      </div>
+    )}
+
+    <!-- 精致的分割线 -->
+    <hr class="footer-divider" />
+
+    <!-- 图标区：一个可以自由换行的独立容器 -->
+    <div class="icons-container">
+      {codes?.map(({ lang }) => (
+        <div class="icon" data-lang={lang} title={`支持 ${lang} 语言`} />
+      ))}
+    </div>
+  </footer>
+</a>
+
+<style lang="scss">
+:root {
+  --card-title-color: #212529;
+  --card-text-color: #495057;
+  --card-subtle-text-color: #868e96;
+  --card-tag-bg: #f1f3f5;
+  --card-tag-text: #5c5f66;
+  --card-divider-color: #f1f3f5;
+  --card-brand-gradient: linear-gradient(120deg, var(--accent-color), var(--green-accent));
+}
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  text-decoration: none;
+  background-color: var(--card-bg);
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    border-radius: 12px;
+    padding: 2px;
+    background: var(--card-brand-gradient);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    z-index: 0;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  &:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    &::before { opacity: 1; }
+  }
+
+  &.hidden { display: none; }
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1; // 关键：让 body 占据所有可用空间，把 footer 推到底部
+  padding: 1.75rem;
+  padding-bottom: 1.25rem;
+  z-index: 1;
+}
+
+.card-header {
+  margin-bottom: 1rem;
+}
+
+.title-main {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin: 0 0 0.25rem;
+  color: var(--card-title-color);
+}
+
+.title-sub {
+  font-size: 0.9rem;
+  color: var(--card-subtle-text-color);
+  margin: 0;
+}
+
+.description {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--card-text-color);
+  margin: 0;
+  // 关键：让描述区也成为伸缩项，填充最后的空白
+  flex-grow: 1;
+  min-height: 2rem;
+}
+
+.card-footer {
+  // 页脚不再是 flex 或 grid，只是一个简单的块级容器
+  padding: 0 1.75rem 1.75rem;
+  z-index: 1;
+}
+
+/* --- 标签区：横向滚动 --- */
+.tags-container {
+  overflow-x: auto; // 核心：允许横向滚动
+  padding-bottom: 0.5rem; // 为滚动条留出一点空间
+
+  // 美化滚动条 (仅在 Webkit 内核浏览器，如 Chrome, Safari, Edge 生效)
+  &::-webkit-scrollbar {
+    height: 4px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: #dee2e6;
+    border-radius: 4px;
+  }
+}
+
+.tags-scroller {
+  display: flex;
+  width: max-content; // 确保内容不换行
+  gap: 0.5rem;
+}
+
+.tag {
+  font-size: 0.75rem;
+  font-weight: 500;
+  background-color: var(--card-tag-bg);
+  color: var(--card-tag-text);
+  padding: 0.25rem 0.75rem;
+  border-radius: 6px;
+  white-space: nowrap; // 保证单个标签不换行
+}
+
+/* --- 精致的分割线 --- */
+.footer-divider {
+  border: none;
+  height: 1px;
+  background-color: var(--card-divider-color);
+  margin: 1rem 0;
+}
+
+/* --- 图标区：自由换行 --- */
+.icons-container {
+  display: flex;
+  flex-wrap: wrap; // 核心：允许图标自由换行
+  gap: 0.75rem;
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  opacity: 0.6;
+  transition: opacity 0.3s ease;
+  .card:hover & { opacity: 0.9; }
+}
+</style>

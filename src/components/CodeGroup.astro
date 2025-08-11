@@ -1,7 +1,9 @@
 ---
+// src/components/CodeGroup.astro (Redesigned)
 import CodeBlock from './CodeBlock.astro'
 import type { Props as CodeBlockProps } from './CodeBlock.astro'
 import { langMapper } from '@/utils/langMapper'
+
 export interface Props {
     groups: CodeBlockProps[]
 }
@@ -9,101 +11,134 @@ export interface Props {
 const { groups } = Astro.props
 ---
 
-<script>
-    const codeGroups = document.querySelectorAll('.code-group')
-    codeGroups.forEach((codeGroup) => {
-        const labels = codeGroup.querySelectorAll('.code-group-label')
-        labels.forEach((label) => {
-            label.addEventListener('click', () => {
-                labels.forEach((label) => label.classList.remove('checked'))
-                label.classList.add('checked')
-            })
-        })
-    })
-</script>
-
 <div class="code-group">
-    <div class="code-group-labels">
+    <div class="tab-bar" role="tablist">
         {
             groups.map(({ lang }, idx) => (
-                <div class:list={['code-group-label', idx === 0 ? 'checked' : '']} data-lang={lang}>
-                    <label for={`code-group-${lang}`}>{langMapper(lang as string)}</label>
-                </div>
+                <button
+                    class:list={["tab", { active: idx === 0 }]}
+                    role="tab"
+                    aria-selected={idx === 0}
+                    aria-controls={`panel-${lang}`}
+                    data-lang={lang}
+                >
+                    <span class="icon" data-lang={lang}></span>
+                    {langMapper(lang as string)}
+                </button>
             ))
         }
+        <div class="active-tab-indicator"></div>
     </div>
 
-    <div class="code-group-container">
+    <div class="tab-panels">
         {
             groups.map(({ code, lang }, idx) => (
-                <>
-                    <input type="radio" class="code-group-input" name="code-group" id={`code-group-${lang}`} checked={idx === 0} />
-                    <CodeBlock code={code} lang={lang} />
-                </>
+                <div class:list={["tab-panel", { active: idx === 0 }]} role="tabpanel" id={`panel-${lang}`}>
+                    <CodeBlock {code} {lang} title={langMapper(lang as string)} />
+                </div>
             ))
         }
     </div>
 </div>
 
-<style lang="scss" is:global>
-    @import url(../styles/iconVars);
-    @import url(../styles/datalang);
+<script>
+    document.querySelectorAll('.code-group').forEach(group => {
+        const tabs = group.querySelectorAll('.tab');
+        const panels = group.querySelectorAll('.tab-panel');
+        const indicator = group.querySelector<HTMLDivElement>('.active-tab-indicator');
 
-    .code-group {
-        margin-top: 2.5rem;
-        .code-group-labels {
-            display: flex;
-            justify-content: start;
-            align-items: center;
-            flex-wrap: wrap;
+        const setActiveTab = (tab) => {
+            // Deactivate all
+            tabs.forEach(t => t.classList.remove('active'));
+            panels.forEach(p => p.classList.remove('active'));
 
-            .code-group-label {
-                display: flex;
-                align-items: center;
-                font-weight: bold;
-                font-size: 0.93rem;
-                cursor: pointer;
-                border-radius: 5px;
-                position: relative;
+            // Activate selected
+            tab.classList.add('active');
+            const panelId = tab.getAttribute('aria-controls');
+            document.getElementById(panelId)?.classList.add('active');
 
-                background-repeat: no-repeat;
-                background-size: 1.5rem;
-                background-position: 0.5rem 50%;
-
-                margin-right: 0.8rem;
-                margin-top: 0.5rem;
-
-                transition: 0.5s ease;
-
-                &:not(:last-child)::after {
-                    content: '|';
-                    position: absolute;
-                    right: -0.6rem;
-                    color: rgba(0, 0, 0, 0.2);
-                }
-
-                &:hover {
-                    background-color: rgba(0, 0, 0, 0.1);
-                }
-
-                &.checked {
-                    background-color: rgba(155, 155, 155, 0.2);
-                }
-
-                label {
-                    padding: 1rem 0.5rem 1rem 2.5rem;
-                    cursor: pointer;
-                    user-select: none;
-                }
-            }
+            // Move indicator
+            indicator.style.left = `${tab.offsetLeft}px`;
+            indicator.style.width = `${tab.offsetWidth}px`;
         }
 
-        .code-group-input {
-            display: none;
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => setActiveTab(tab));
+        });
+        
+        // Set initial indicator position
+        const initialActiveTab = group.querySelector<HTMLButtonElement>('.tab.active');
+        if (initialActiveTab) {
+            // Use a timeout to ensure the element has been rendered and has a size
+            setTimeout(() => {
+                indicator.style.left = `${initialActiveTab.offsetLeft}px`;
+                indicator.style.width = `${initialActiveTab.offsetWidth}px`;
+                indicator.style.opacity = '1';
+            }, 50);
+        }
+    });
+</script>
 
-            &:not(:checked) + .code-block {
-                display: none;
-            }
+<style lang="scss">
+    /* --- Redesigned CodeGroup Styles --- */
+    .code-group {
+        margin: 2.5rem 0;
+    }
+
+    .tab-bar {
+        position: relative;
+        display: flex;
+        border-bottom: 1px solid var(--code-border-color);
+    }
+
+    .tab {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.25rem;
+        font-size: 0.9rem;
+        font-weight: 500;
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: var(--subtle-text-color);
+        transition: color 0.3s ease;
+        white-space: nowrap;
+
+        .icon {
+            width: 18px;
+            height: 18px;
+            background-repeat: no-repeat;
+            background-size: contain;
+            background-position: center;
+        }
+
+        &:hover {
+            color: var(--text-color);
+        }
+
+        &.active {
+            color: var(--text-color);
         }
     }
+
+    .active-tab-indicator {
+        position: absolute;
+        bottom: -1px;
+        height: 2px;
+        background-color: var(--accent-color-dark);
+        transition: left 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), width 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        opacity: 0; // Initially hidden
+    }
+
+    .tab-panel {
+        display: none;
+        &.active {
+            display: block;
+        }
+    }
+
+    // Import language icons from shared styles
+    @import url(../styles/iconVars);
+    @import url(../styles/datalang);
 </style>
