@@ -1,7 +1,9 @@
 ---
 title: 马拉车
 subtitle: Manacher
-keywords: [马拉车, manacher, 回文, dp]
+description: 在线性时间内求字符串的最长回文子串
+tags: [字符串, 回文, 马拉车]
+keywords: [马拉车, Manacher, malache, mlc]
 math: true
 ---
 

@@ -1,5 +1,8 @@
 ---
 title: 简易线段树
+description: 简化版线段树，支持单点修改和区间查询
+tags: [数据结构, 线段树, 区间查询]
+keywords: [简易线段树, jianyixianduanshu, jyxds]
 ---
 
 

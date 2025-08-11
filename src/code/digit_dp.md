@@ -1,7 +1,9 @@
 ---
 title: 数位DP
 subtitle: Digit DP
-keywords: [数位dp, dp]
+keywords: [数位DP, Digit DP, shuweidp, swdp]
+description: 按数位拆分状态，统计满足条件的数的数量
+tags: [动态规划, 数位dp, 状态压缩]
 ---
 
 :::leetcode

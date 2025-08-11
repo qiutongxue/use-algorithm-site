@@ -1,5 +1,8 @@
 ---
 title: 线段树
+description: 支持区间查询和单点修改的树状数据结构
+tags: [数据结构, 线段树, 区间查询]
+keywords: [线段树, xianduanshu, xds]
 ---
 
 :::note{.danger}

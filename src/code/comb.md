@@ -1,8 +1,10 @@
 ---
 title: 组合
 subtitle: Comb
-keywords: [组合, comb, 乘法逆元, 数学]
+keywords: [组合, comb, zuhe, he]
 math: true
+description: 利用乘法逆元在模数下高效计算组合数
+tags: [数学, 组合数, 乘法逆元, 模运算]
 ---
 
 :::leetcode

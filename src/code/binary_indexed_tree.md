@@ -1,7 +1,9 @@
 ---
 title: 树状数组
 subtitle: Binary Indexed Tree
-keywords: [树状数组, Binary Indexed Tree, BIT, 数据结构]
+keywords: [树状数组, Binary Indexed Tree, BIT, shuzhuangshuzu, szsz]
+description: 高效支持前缀和查询与单点修改的数组结构
+tags: [数据结构, 前缀和, 树状数组]
 ---
 
 :::leetcode
