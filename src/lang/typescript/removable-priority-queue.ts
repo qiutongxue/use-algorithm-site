@@ -1,55 +1,57 @@
-function useRemovablePriorityQueue<T>(
-	compare: Comparator<T> = (a, b) => (a === b ? 0 : a > b ? 1 : -1),
+type Comparator<T> = (o1: T, o2: T) => number
+
+export function useRemovablePriorityQueue<T>(
+    compare: Comparator<T> = (a, b) => (a === b ? 0 : a > b ? 1 : -1),
 ) {
-	const pq = usePriorityQueue(compare);
-	const map = new Map<T, number>();
-	let _size = 0;
+    const pq = usePriorityQueue(compare)
+    const map = new Map<T, number>()
+    let _size = 0
 
-	const removeUnusable = () => {
-		while (!pq.isEmpty() && !map.has(pq.peek()!)) pq.pop();
-	};
+    const removeUnusable = () => {
+        while (!pq.isEmpty() && !map.has(pq.peek())) pq.pop()
+    }
 
-	const del = (e: T) => {
-		if (!map.has(e)) return false;
+    const del = (e: T) => {
+        if (!map.has(e)) return false
 
-		map.set(e, map.get(e)! - 1);
-		if (map.get(e)! <= 0) map.delete(e);
+        map.set(e, map.get(e) - 1)
+        if (map.get(e) <= 0) map.delete(e)
 
-		return true;
-	};
+        return true
+    }
 
-	const push = (e: T) => {
-		pq.push(e);
+    const push = (e: T) => {
+        pq.push(e)
 
-		map.set(e, (map.get(e) || 0) + 1);
-		_size++;
-	};
+        map.set(e, (map.get(e) || 0) + 1)
+        _size++
+    }
 
-	const peek = () => {
-		removeUnusable();
-		return pq.peek();
-	};
+    const peek = () => {
+        removeUnusable()
+        return pq.peek()
+    }
 
-	const pop = () => {
-		removeUnusable();
-		if (pq.isEmpty()) return null;
+    const pop = () => {
+        removeUnusable()
+        if (pq.isEmpty()) return null
 
-		const res = pq.pop()!;
-		_size--;
-		del(res);
-		return res;
-	};
+        const res = pq.pop()
+        _size--
+        del(res)
+        return res
+    }
 
-	const remove = (e: T) => {
-		const hasElement = del(e);
-		if (hasElement) _size--;
+    const remove = (e: T) => {
+        const hasElement = del(e)
+        if (hasElement) _size--
 
-		return hasElement;
-	};
+        return hasElement
+    }
 
-	const size = () => _size;
+    const size = () => _size
 
-	const isEmpty = () => size() === 0;
+    const isEmpty = () => size() === 0
 
-	return { push, pop, isEmpty, size, remove, peek };
+    return { push, pop, isEmpty, size, remove, peek }
 }
