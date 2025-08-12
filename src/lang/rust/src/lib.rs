@@ -8,6 +8,7 @@ pub mod next_permutation;
 pub mod prime_generator;
 pub mod priority_queue;
 pub mod removable_priority_queue;
+pub mod segment_tree;
 pub mod simple_segment_tree;
 pub mod string_hash;
 pub mod trie;
