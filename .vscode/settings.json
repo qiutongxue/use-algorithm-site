@@ -1,5 +1,8 @@
 {
   "rust-analyzer.linkedProjects": [
     "./src/lang/rust/Cargo.toml"
-  ]
+  ],
+  "editor.codeActionsOnSave": {
+    "source.organizeImports.biome": "explicit"
+  }
 }
