@@ -57,7 +57,7 @@ where
     }
 
     fn remove_unusable(&mut self) {
-        while !self.pq.is_empty() && self.exist.contains_key(self.pq.peek().unwrap()) {
+        while !self.pq.is_empty() && !self.exist.contains_key(self.pq.peek().unwrap()) {
             self.pq.pop();
         }
     }
