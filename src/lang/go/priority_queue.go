@@ -60,3 +60,7 @@ func (pq *PriorityQueue[T]) Peek() (T, bool) {
 func (pq *PriorityQueue[T]) Len() int {
 	return len(pq.data)
 }
+
+func (pq *PriorityQueue[T]) IsEmpty() bool {
+	return pq.Len() == 0
+}
